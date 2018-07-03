@@ -1,0 +1,56 @@
+{
+    "version" : "1.1",
+    "configUpdateUrl" : "http://familyagency.ru/lab/synapse/digitalframes/config.json",
+    "needRemoteUpdate": false,
+    "standId": 12,
+    "appTypeId": 1,
+    "screens":
+    {
+        "touch":
+        {
+            "x" : 1920,
+            "y" : 10,
+            "width" : 820,
+            "height" : 1080
+        },
+        "game":
+        {
+            "x" : 2820,
+            "y" : 100,
+            "width" : 1920,
+            "height" : 1080
+        }
+    },
+    "rfid":
+    {
+        "serialPort": "COM8",
+        "portKeyWord": "FTDI",
+        "baudRate": 115200,
+        "autoConnect": false,
+        "useKeyword": false
+    },
+    "mindwave":
+    {
+        "ip" : "127.0.0.1",
+        "port": 13854,
+        "autoConnect": true,
+        "delimeter" : "\r",
+        "initialCommand" : "{\"enableRawOutput\": true, \"format\": \"Json\"}\\r",
+        "authCommand" : "{\"appName\":\"BrainwaveShooters\",\"appKey\":\"0054141b4b4c567c558d3a76cb8d715cbde03096\"}\\r"
+    },
+    "slack":
+    {
+        "logChannels":
+            [
+            "https://hooks.slack.com/services/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"
+        ],
+        "errorChannels":
+            [
+            "https://hooks.slack.com/services/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"
+        ]
+    },
+    "server":
+    {
+        "url": "http://mindwave.family.creative"
+    }
+}

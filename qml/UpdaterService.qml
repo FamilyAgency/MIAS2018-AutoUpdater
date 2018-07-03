@@ -36,7 +36,7 @@ Item {
 
             Text
             {
-                text: "Time to next check: ";// + userData.firstTime;
+                text: "Time to next check: " + updaterService.timeToUpdate;
                 font.family: "Helvetica"
                 font.pixelSize: 15
                 color: "#999999"

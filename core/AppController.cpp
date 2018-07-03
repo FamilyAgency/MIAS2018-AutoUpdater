@@ -12,9 +12,6 @@ AppController::AppController(QObject *parent) : QObject(parent)
 
 
     connect(processService, SIGNAL(processStopped(int)), this, SLOT(onProcessStopped(int)));
-
-
-
 }
 
 void AppController::setQmlContext(QQmlContext* qmlContext)
@@ -24,18 +21,22 @@ void AppController::setQmlContext(QQmlContext* qmlContext)
 }
 
 void AppController::onConfigLoaded(Config* config)
-{
+{    
     updaterService->setConfig(config);
     processService->setConfig(config);
 
+    updaterService->start();
+    processService->start();
+
     if( !updaterService->hasUpdate())
     {
-        processService->startApp();
+       // processService->startApp();
     }
     else
     {
         //wait for loading;
     }
+
 
 }
 

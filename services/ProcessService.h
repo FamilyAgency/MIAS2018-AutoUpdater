@@ -17,7 +17,6 @@ public:
 
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
 
-
     Q_INVOKABLE void startApp();
     Q_INVOKABLE void stopApp();
 

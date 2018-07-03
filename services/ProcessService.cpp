@@ -16,7 +16,6 @@ void ProcessService::setQmlContext(QQmlContext* qmlContext)
     qmlContext->setContextProperty("processService", this);
 }
 
-
 void ProcessService::startApp()
 {
     program = "c:\\projects\\Qt\\MIAS2018\\StandClient\\release\\MindwaveGameClient.exe";
