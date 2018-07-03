@@ -2,7 +2,20 @@ QT += qml quick
 
 CONFIG += c++11
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    config/Config.cpp \
+    config/ConfigController.cpp \
+    config/ConfigLoader.cpp \
+    config/ConfigParser.cpp \
+    config/ConfigWriter.cpp \
+    core/AppController.cpp \
+    core/StandData.cpp \
+    core/Types.cpp \
+    network/http/HTTPClient.cpp \
+    services/BaseService.cpp \
+    services/LoggerService.cpp \
+    services/UpdaterService.cpp \
+    services/ProcessService.cpp
 
 RESOURCES += qml.qrc
 
@@ -29,3 +42,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES +=
+
+HEADERS += \
+    config/Config.h \
+    config/ConfigController.h \
+    config/ConfigLoader.h \
+    config/ConfigParser.h \
+    config/ConfigWriter.h \
+    core/AppController.h \
+    core/StandData.h \
+    core/Types.h \
+    network/http/HTTPClient.h \
+    services/BaseService.h \
+    services/LoggerService.h \
+    services/UpdaterService.h \
+    services/ProcessService.h
