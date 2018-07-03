@@ -26,6 +26,17 @@ void ProcessService::startApp()
     process->start(program, args);
 }
 
+bool ProcessService::running() const
+{
+    return _running;
+}
+
+void ProcessService::setRunning(bool value)
+{
+    _running = value;
+    emit runningChanged();
+}
+
 void ProcessService::stopApp()
 {
     process->close();
@@ -55,11 +66,14 @@ void ProcessService::onReadyReadStandardError()
 void ProcessService::onProcessFinished(int value)
 {
     qDebug()<<"process Finished";
+    setRunning(false);
+    emit processStopped(value);
 }
 
 void ProcessService::onProcessStarted()
 {
    qDebug()<<"process Started";
+   setRunning(true);
 }
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)

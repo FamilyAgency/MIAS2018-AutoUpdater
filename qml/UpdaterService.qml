@@ -12,7 +12,7 @@ Item {
             spacing: 10;
             Text
             {
-                text: "Process data";
+                text: "Updater data";
                 font.family: "Helvetica"
                 font.pixelSize: 17
                 color: "#000099"
@@ -20,7 +20,23 @@ Item {
 
             Text
             {
-                text: "Porocess path: ";// + userData.exist;
+                text: "Last update: ";// + userData.exist;
+                font.family: "Helvetica"
+                font.pixelSize: 15
+                color: "#999999"
+            }
+
+            Text
+            {
+                text: "Config version: ";// + userData.firstTime;
+                font.family: "Helvetica"
+                font.pixelSize: 15
+                color: "#999999"
+            }
+
+            Text
+            {
+                text: "Time to next check: ";// + userData.firstTime;
                 font.family: "Helvetica"
                 font.pixelSize: 15
                 color: "#999999"
@@ -34,27 +50,23 @@ Item {
                 color: "#999999"
             }
 
-            Button
+            CheckBox
             {
                 implicitWidth: 200;
-                text:"Start";
-                enabled: !processService.running;
-                onClicked:
-                {
-                    processService.startApp();
-                }
+                text: "Auto check"
             }
 
             Button
             {
                 implicitWidth: 200;
-                text:"Stop";
-                enabled: processService.running;
+                text:"Check now";
                 onClicked:
                 {
-                    processService.stopApp();
+
                 }
             }
+
+
         }
     }
 }

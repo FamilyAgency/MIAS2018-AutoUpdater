@@ -12,9 +12,6 @@ AppController::AppController(QObject *parent) : QObject(parent)
 
 
     connect(processService, SIGNAL(processStopped(int)), this, SLOT(onProcessStopped(int)));
-
-
-
 }
 
 void AppController::setQmlContext(QQmlContext* qmlContext)

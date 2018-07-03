@@ -4,5 +4,6 @@
         <file>qml/main.qml</file>
         <file>resouurces/config.json</file>
         <file>qml/ProcessService.qml</file>
+        <file>qml/UpdaterService.qml</file>
     </qresource>
 </RCC>

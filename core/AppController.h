@@ -46,6 +46,8 @@ private slots:
     void onUpdateComplete();
     void onUpdateError();
     void onUpdateLoadingError();
+
+    void onProcessStopped(int value);
 };
 
 #endif // APPCOPCONTROLLER_H

@@ -13,9 +13,15 @@ ApplicationWindow
     property int marginTop:10;
     property int columnShift:400;
 
-    ProcessService
+    UpdaterService
     {
         x:marginLeft;
+        y:marginTop;
+    }
+
+    ProcessService
+    {
+        x:marginLeft * 7;
         y:marginTop;
     }
 }
