@@ -11,6 +11,12 @@ AppController::AppController(QObject *parent) : QObject(parent)
     connect(updaterService, SIGNAL(updateLoadingError()), this, SLOT(onUpdateLoadingError()));
 }
 
+void AppController::setQmlContext(QQmlContext* qmlContext)
+{
+    processService->setQmlContext(qmlContext);
+    updaterService->setQmlContext(qmlContext);
+}
+
 void AppController::onConfigLoaded(Config* config)
 {
     updaterService->setConfig(config);
@@ -58,10 +64,7 @@ void AppController::start()
 
 }
 
-void AppController::setQmlContext(QQmlContext* qmlContext)
-{
 
-}
 
 
 

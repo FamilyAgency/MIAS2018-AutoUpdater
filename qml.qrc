@@ -3,5 +3,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>qml/main.qml</file>
         <file>resouurces/config.json</file>
+        <file>qml/ProcessService.qml</file>
     </qresource>
 </RCC>

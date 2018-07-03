@@ -8,4 +8,14 @@ ApplicationWindow
     width: 1280
     height: 720
     title: qsTr("Auto updater")
+
+    property int marginLeft:50;
+    property int marginTop:10;
+    property int columnShift:400;
+
+    ProcessService
+    {
+        x:marginLeft;
+        y:marginTop;
+    }
 }
