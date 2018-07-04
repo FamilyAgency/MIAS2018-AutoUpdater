@@ -6,6 +6,15 @@ UpdaterService::UpdaterService(QObject *parent) : BaseService(parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
 }
 
+UpdaterService::~UpdaterService()
+{
+    if(timer)
+    {
+        disconnect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+        delete timer;
+    }
+}
+
 void UpdaterService::start()
 {   
     startTime = QDateTime::currentMSecsSinceEpoch();

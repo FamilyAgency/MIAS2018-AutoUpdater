@@ -14,6 +14,8 @@ class UpdaterService : public BaseService
 
 public:
     explicit UpdaterService(QObject *parent = nullptr);
+    virtual ~UpdaterService();
+
     virtual void start() override;
     virtual void stop() override;
     virtual QString getName() const override;

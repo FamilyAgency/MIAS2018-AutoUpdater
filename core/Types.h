@@ -8,68 +8,12 @@
 #include <QList>
 #include <QJsonObject>
 
-
 enum class LogType
 {
     Verbose,
     Warning,
     Error
 };
-
-struct TCPConfig
-{
-    QString ip = "127.0.0.1";
-    int port = 13854;
-    bool autoConnect = true;
-    QString delimeter = "\r";
-};
-
-struct MindwaveConfig
-{
-private:
-    Q_GADGET
-    Q_PROPERTY(QString ip MEMBER ip)
-    Q_PROPERTY(int port MEMBER port)
-    Q_PROPERTY(bool autoConnect MEMBER autoConnect)
-    Q_PROPERTY(QString delimeter MEMBER delimeter)
-
-public:
-    TCPConfig getTCPConfig()
-    {
-        TCPConfig config;
-        config.ip = ip;
-        config.port = port;
-        config.autoConnect = autoConnect;
-        config.delimeter = delimeter;
-        return config;
-    }
-
-    QString ip = "127.0.0.1";
-    int port = 13854;
-    bool autoConnect = true;
-    QString delimeter = "\r";
-    QString initialCommand = "{\"enableRawOutput\": true, \"format\": \"Json\"}\\r";
-    QString authCommand = "{\"appName\":\"BrainwaveShooters\",\"appKey\":\"0054141b4b4c567c558d3a76cb8d715cbde03096\"}\\r";
-};
-Q_DECLARE_METATYPE(MindwaveConfig)
-
-
-struct RFIDConfig
-{
-private:
-    Q_GADGET
-    Q_PROPERTY(QString serialPort MEMBER serialPort)
-    Q_PROPERTY(int baudRate MEMBER baudRate)
-    Q_PROPERTY(bool autoConnect MEMBER autoConnect)
-
-public:
-    QString serialPort = "COM1";
-    QString portKeyWord = "Arduino";
-    int baudRate = 9600;
-    bool useKeyword = true;
-    bool autoConnect = true;
-};
-Q_DECLARE_METATYPE(RFIDConfig)
 
 struct MainConfig
 {
@@ -80,8 +24,6 @@ private:
     Q_PROPERTY(bool needRemoteUpdate MEMBER needRemoteUpdate)
     Q_PROPERTY(int standId MEMBER standId)
     Q_PROPERTY(int appTypeId MEMBER appTypeId)
-    Q_PROPERTY(QRect touchScreen MEMBER touchScreen)
-    Q_PROPERTY(QRect gameScreen MEMBER gameScreen)
 
  public:
     QString version;
@@ -89,27 +31,35 @@ private:
     bool needRemoteUpdate;
     int standId;
     int appTypeId;
-    QRect touchScreen;
-    QRect gameScreen;
 };
 Q_DECLARE_METATYPE(MainConfig)
 
-struct ServerConfig
+struct ProcessConfig
 {
 private:
     Q_GADGET
-    Q_PROPERTY(QString url MEMBER url)
+    Q_PROPERTY(QString path MEMBER path)
+    Q_PROPERTY(bool autorun MEMBER autorun)
 
 public:
-    QString url = "http://mindwave.family.creative";
+    QString path = "";
+    bool autorun = false;
 };
-Q_DECLARE_METATYPE(ServerConfig)
+Q_DECLARE_METATYPE(ProcessConfig)
 
-struct SlackConfig
+struct UpdateConfig
 {
-    QString logChannel;
-    QString errChannel;
-};
+private:
+    Q_GADGET
+    Q_PROPERTY(QString folderCheck MEMBER folderCheck)
+    Q_PROPERTY(int frequency MEMBER frequency)
+    Q_PROPERTY(bool autocheck MEMBER autocheck)
 
+public:
+    QString folderCheck = "";
+    int frequency = 100000;
+    bool autocheck = false;
+};
+Q_DECLARE_METATYPE(UpdateConfig)
 
 #endif // TYPES_H

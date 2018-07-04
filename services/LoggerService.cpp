@@ -6,7 +6,7 @@ LoggerService::LoggerService(QObject *parent) : BaseService(parent)
 
 }
 
-void LoggerService::setConfig(Config* config)
+void LoggerService::setConfig(ConfigPtr config)
 {
     standId = config->configData.standId;
 }

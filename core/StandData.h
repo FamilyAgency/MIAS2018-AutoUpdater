@@ -17,8 +17,6 @@ public:
     void setConfig(const MainConfig& config);
     MainConfig config() const;
 
-    Q_INVOKABLE QVariantList getScreensInfo() const;
-
 private:   
     QQmlContext* qmlContext;
     MainConfig _mainConfig;

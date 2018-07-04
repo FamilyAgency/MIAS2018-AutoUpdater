@@ -5,7 +5,7 @@ BaseService::BaseService(QObject *parent) : QObject(parent)
 
 }
 
-void BaseService::setConfig(Config* value)
+void BaseService::setConfig(ConfigPtr value)
 {
     config = value;
 }

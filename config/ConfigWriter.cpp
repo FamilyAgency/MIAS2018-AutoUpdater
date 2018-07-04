@@ -9,12 +9,12 @@ ConfigWriter::ConfigWriter()
 
 }
 
-void ConfigWriter::save(Config* config, const QString& path)
+void ConfigWriter::save(ConfigPtr config, const QString& path)
 {
 
 }
 
-void ConfigWriter::saveProcessConfigData(Config* config, int processId)
+void ConfigWriter::saveProcessConfigData(ConfigPtr config, int processId)
 {
 
 }

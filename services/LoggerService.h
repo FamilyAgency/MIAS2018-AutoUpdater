@@ -21,7 +21,7 @@ public:
 
     LoggerService(QObject *parent = nullptr);
 
-    virtual void setConfig(Config* config) override;
+    virtual void setConfig(ConfigPtr config) override;
     virtual void setQmlContext(QQmlContext* qmlContext) override;
     virtual void start() override;
     virtual void stop() override;

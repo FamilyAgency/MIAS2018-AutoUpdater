@@ -11,8 +11,8 @@ class ConfigWriter: public QObject
 public:
     ConfigWriter();
 
-    void save(Config* config, const QString& path);
-    void saveProcessConfigData(Config* config, int processId);
+    void save(ConfigPtr config, const QString& path);
+    void saveProcessConfigData(ConfigPtr config, int processId);
 };
 
 #endif // CONFIGWRITER_H

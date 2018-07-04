@@ -8,6 +8,8 @@
 #include <QDebug.h>
 #include <core/Types.h>
 
+typedef  QSharedPointer<class Config> ConfigPtr;
+
 class Config
 {
 public:
@@ -15,10 +17,8 @@ public:
     bool valid = true;
 
     MainConfig configData;
-    MindwaveConfig mindwaveData;
-    RFIDConfig arduinoData;
-    ServerConfig serverData;
-    SlackConfig slackData;
+    ProcessConfig processData;
+    UpdateConfig updateData;
 
     QString getRawData() const;
     void setRawData(const QString& value);
@@ -26,5 +26,7 @@ public:
 private:
     QString rawData;
 };
+
+
 
 #endif // CONFIG_H

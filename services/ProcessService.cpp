@@ -1,4 +1,5 @@
 #include "ProcessService.h"
+#include <QDirIterator>
 
 ProcessService::ProcessService(QObject *parent) : BaseService(parent)
 {
@@ -7,7 +8,23 @@ ProcessService::ProcessService(QObject *parent) : BaseService(parent)
     connect(process, SIGNAL(finished(int)), this, SLOT(onProcessFinished(int)));
     connect(process, SIGNAL(started()), this, SLOT(onProcessStarted()));
     connect(process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onErrorOccurred(QProcess::ProcessError)));
+}
 
+ProcessService::~ProcessService()
+{
+    disconnect(process, SIGNAL(readyReadStandardError()),this, SLOT(onReadyReadStandardError()));
+    disconnect(process, SIGNAL(finished(int)), this, SLOT(onProcessFinished(int)));
+    disconnect(process, SIGNAL(started()), this, SLOT(onProcessStarted()));
+    disconnect(process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onErrorOccurred(QProcess::ProcessError)));
+
+    if(process)
+    {
+        if(process->isOpen())
+        {
+            process->close();
+        }
+        delete process;
+    }
 }
 
 void ProcessService::setQmlContext(QQmlContext* qmlContext)
@@ -16,13 +33,44 @@ void ProcessService::setQmlContext(QQmlContext* qmlContext)
     qmlContext->setContextProperty("processService", this);
 }
 
+void ProcessService::setConfig(ConfigPtr value)
+{
+    BaseService::setConfig(value);
+    config = value;
+    setProcesConfig(value->processData);
+}
+
+void ProcessService::setProcesConfig(const ProcessConfig& value)
+{
+    _processConfig = value;
+    if(value.autorun)
+    {
+        startApp();
+    }
+    emit processConfigChanged();
+}
+
+ProcessConfig ProcessService::processConfig() const
+{
+    return _processConfig;
+}
+
 void ProcessService::startApp()
 {
-    program = "c:\\projects\\Qt\\MIAS2018\\StandClient\\release\\MindwaveGameClient.exe";
-    args.clear();
-    //QString argStr = "processConfig=" + processConfig[id].getConfigPath();
-   // args.push_back(argStr);
-    process->start(program, args);
+    program = _processConfig.path;
+    process->start(program);
+}
+
+QString ProcessService::findAppFullPath() const
+{
+    QDir dir(_processConfig.path);
+    QFileInfoList list = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    foreach(QFileInfo finfo, list)
+    {
+        qDebug() <<  finfo.fileName();
+    }
+
+    return  "...";
 }
 
 bool ProcessService::running() const
@@ -54,7 +102,7 @@ void ProcessService::stop()
 
 QString ProcessService::getName() const
 {
-     return "ProcessService";
+    return "ProcessService";
 }
 
 void ProcessService::onReadyReadStandardError()
@@ -71,8 +119,8 @@ void ProcessService::onProcessFinished(int value)
 
 void ProcessService::onProcessStarted()
 {
-   qDebug()<<"process Started";
-   setRunning(true);
+    qDebug()<<"process Started";
+    setRunning(true);
 }
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)

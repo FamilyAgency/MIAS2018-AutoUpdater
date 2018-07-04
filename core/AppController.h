@@ -25,6 +25,7 @@ public:
     Q_ENUMS(AppState)
 
     AppController(QObject *parent = nullptr);
+    virtual ~AppController();
 
 public:
     void setQmlContext(QQmlContext* qmlContext);
@@ -32,13 +33,13 @@ public:
     Q_INVOKABLE void start();
 
 private:
-    StandData* standData;  
-    ProcessService* processService = nullptr;
-    UpdaterService* updaterService = nullptr;
+    QSharedPointer<StandData> standData;
+    QSharedPointer<ProcessService> processService;
+    QSharedPointer<UpdaterService> updaterService;
     Config* config = nullptr;
 
 public slots:
-    void onConfigLoaded(Config* config);
+    void onConfigLoaded(ConfigPtr config);
     void onConfigError();
 
 private slots:

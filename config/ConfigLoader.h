@@ -28,7 +28,7 @@ public:
     bool isValid() const;
 
 private:   
-    HTTPClient* httpClient;
+    QScopedPointer<HTTPClient> httpClient;
     QString configContext = "";
 
 private slots:
