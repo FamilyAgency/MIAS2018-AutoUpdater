@@ -45,7 +45,7 @@ void ConfigParser::parse(const QString& configData)
 MainConfig ConfigParser::parseConfigData(const QJsonObject& jsonObj)
 {
     MainConfig configData;
-    configData.version = jsonObj["version"].toString();
+    configData.version = jsonObj["version"].toInt();
     configData.configUpdateUrl = jsonObj["configUpdateUrl"].toString();
     configData.needRemoteUpdate = jsonObj["needRemoteUpdate"].toBool();
     configData.standId = jsonObj["standId"].toInt();
@@ -65,6 +65,7 @@ UpdateConfig ConfigParser::parseUpdateData(const QJsonObject& jsonObj)
 {
     UpdateConfig update;
     update.folderCheck = jsonObj["folderCheck"].toString();
+    update.lastUpdateDate = jsonObj["lastUpdateDate"].toString();
     update.frequency = jsonObj["frequency"].toInt();
     update.autocheck = jsonObj["autocheck"].toBool();
     return update;

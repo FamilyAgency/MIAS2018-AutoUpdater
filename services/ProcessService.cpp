@@ -42,11 +42,7 @@ void ProcessService::setConfig(ConfigPtr value)
 
 void ProcessService::setProcesConfig(const ProcessConfig& value)
 {
-    _processConfig = value;
-    if(value.autorun)
-    {
-        startApp();
-    }
+    _processConfig = value;  
     emit processConfigChanged();
 }
 
@@ -92,7 +88,10 @@ void ProcessService::stopApp()
 
 void ProcessService::start()
 {
-
+    if(_processConfig.autorun)
+    {
+        startApp();
+    }
 }
 
 void ProcessService::stop()

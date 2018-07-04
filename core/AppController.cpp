@@ -25,25 +25,18 @@ AppController::~AppController()
 
 void AppController::setQmlContext(QQmlContext* qmlContext)
 {
+    standData->setQmlContext(qmlContext);
     processService->setQmlContext(qmlContext);
     updaterService->setQmlContext(qmlContext);
 }
 
 void AppController::onConfigLoaded(ConfigPtr config)
-{    
+{
+    standData->setConfig(config->configData);
     updaterService->setConfig(config);
     processService->setConfig(config);
     updaterService->start();
     processService->start();
-
-    if( !updaterService->hasUpdate())
-    {
-       // processService->startApp();
-    }
-    else
-    {
-        //wait for loading;
-    }
 }
 
 void AppController::onPendingUpdate()
@@ -53,7 +46,7 @@ void AppController::onPendingUpdate()
 
 void AppController::onUpdateComplete()
 {
-
+    processService->startApp();
 }
 
 void AppController::onProcessStopped(int value)

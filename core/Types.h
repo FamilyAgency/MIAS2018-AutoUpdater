@@ -19,14 +19,14 @@ struct MainConfig
 {
 private:
     Q_GADGET
-    Q_PROPERTY(QString version MEMBER version)
+    Q_PROPERTY(int version MEMBER version)
     Q_PROPERTY(QString configUpdateUrl MEMBER configUpdateUrl)
     Q_PROPERTY(bool needRemoteUpdate MEMBER needRemoteUpdate)
     Q_PROPERTY(int standId MEMBER standId)
     Q_PROPERTY(int appTypeId MEMBER appTypeId)
 
  public:
-    QString version;
+    int version;
     QString configUpdateUrl;
     bool needRemoteUpdate;
     int standId;
@@ -52,11 +52,13 @@ struct UpdateConfig
 private:
     Q_GADGET
     Q_PROPERTY(QString folderCheck MEMBER folderCheck)
+    Q_PROPERTY(QString lastUpdateDate MEMBER lastUpdateDate)
     Q_PROPERTY(int frequency MEMBER frequency)
     Q_PROPERTY(bool autocheck MEMBER autocheck)
 
 public:
     QString folderCheck = "";
+    QString lastUpdateDate = "";
     int frequency = 100000;
     bool autocheck = false;
 };

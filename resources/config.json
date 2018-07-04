@@ -1,14 +1,16 @@
 {
-    "version" : "100",
+    "version" : 13,
     "configUpdateUrl" : "http://familyagency.ru/lab/synapse/digitalframes/config.json",
     "needRemoteUpdate": false,
     "standId": 12,
     "appTypeId": 1,    
     "update":
     {
-        "folderCheck" : "c:\\projects\\Qt\\MIAS2018\\StandClient\\release\\",
-        "frequency": 100000,
-        "autocheck": true
+        "folderCheck" : "c:\\projects\\Qt\\MIAS2018\\testBuilds\\",
+        "frequency": 10000,
+        "autocheck": false,
+        "lastUpdateDate": "04.07.2018"
+
     },
     "process":
     {
