@@ -9,6 +9,11 @@ Config::Config()
     monitoringConfig.reset(new MonitoringConfig);
 }
 
+Config::~Config()
+{
+
+}
+
 QString Config::getRawData() const
 {
     return rawData;

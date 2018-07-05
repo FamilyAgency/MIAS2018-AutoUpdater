@@ -9,13 +9,15 @@ ConfigWriter::ConfigWriter()
 
 }
 
-void ConfigWriter::save(ConfigPtr config, const QString& path)
+ConfigWriter::~ConfigWriter()
 {
-    qDebug()<< "save config.............";
 
+}
+
+void ConfigWriter::save(ConfigPtr config, const QString& path)
+{ 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(config->getRawData().toUtf8());
     QJsonObject jsonObj   = jsonDoc.object();
-
     jsonObj["version"] = QJsonValue::fromVariant(config->mainConfig->version);
 
     QJsonDocument doc(jsonObj);

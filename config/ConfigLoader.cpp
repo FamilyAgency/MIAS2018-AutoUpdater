@@ -9,6 +9,12 @@ ConfigLoader::ConfigLoader()
     connect(httpClient.data(), SIGNAL(httpRequestFailed()), this, SLOT(httpRequestFailedHandler()));
 }
 
+ConfigLoader::~ConfigLoader()
+{
+    disconnect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
+    disconnect(httpClient.data(), SIGNAL(httpRequestFailed()), this, SLOT(httpRequestFailedHandler()));
+}
+
 void ConfigLoader::load(CONFIG_LOAD_METHOD method, const QString& path)
 {
     if(method == CONFIG_LOAD_METHOD::LOCAL_FILE ||

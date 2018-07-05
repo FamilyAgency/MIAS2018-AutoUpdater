@@ -23,6 +23,8 @@ public:
     };
 
     ConfigLoader();
+    virtual ~ConfigLoader();
+
     void load(CONFIG_LOAD_METHOD method, const QString& path = "");
     QString getConfig() const;
     bool isValid() const;

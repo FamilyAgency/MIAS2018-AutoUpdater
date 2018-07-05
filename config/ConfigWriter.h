@@ -10,7 +10,7 @@ class ConfigWriter: public QObject
 
 public:
     ConfigWriter();
-
+    ~ConfigWriter();
     void save(ConfigPtr config, const QString& path);
 };
 

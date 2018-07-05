@@ -14,6 +14,7 @@ class Config
 {
 public:
     Config();
+    virtual ~Config();
     bool valid = true;
 
     QSharedPointer<MainConfig> mainConfig;
