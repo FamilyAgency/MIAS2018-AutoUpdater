@@ -12,6 +12,7 @@ class HTTPClient : public QObject
     Q_OBJECT
 public:
     explicit HTTPClient(QObject *parent = nullptr);
+    virtual ~HTTPClient();
     bool getRequestStatus() const;
     void runRequest(const QString& URL);
 
