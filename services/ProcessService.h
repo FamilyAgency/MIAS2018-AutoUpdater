@@ -39,6 +39,7 @@ public:
 
     ProcessState processState() const;
     void setProcessState(ProcessState value);
+    bool isStopped() const;
 
 private:
     ProcessConfig _processConfig;

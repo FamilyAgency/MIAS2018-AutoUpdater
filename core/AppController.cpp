@@ -46,13 +46,13 @@ void AppController::onConfigLoaded(ConfigPtr value)
 
 void AppController::onPendingUpdate()
 {    
-    if(processService->processState() != ProcessService::ProcessState::Stopped)
+    if(processService->isStopped())
     {
-        processService->stopApp();
+        updaterService->startUpdate();
     }
     else
     {
-        updaterService->startUpdate();
+        processService->stopApp();
     }
 }
 

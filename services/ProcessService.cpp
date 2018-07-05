@@ -130,5 +130,3 @@ void ProcessService::onErrorOccurred(QProcess::ProcessError error)
 {
     qDebug()<<"error Occurred "<<error;
 }
-
-
