@@ -21,7 +21,7 @@ void HTTPClient::runRequest(const QString& URL)
 
 void HTTPClient::httpRequestSuccessHandler(QNetworkReply* reply)
 {
-    if ( reply->error() != QNetworkReply::NoError )
+    if (reply->error() != QNetworkReply::NoError )
     {
         qDebug() << "Request failed, " << reply->errorString();
         emit httpRequestFailed();

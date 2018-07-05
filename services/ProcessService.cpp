@@ -17,12 +17,9 @@ ProcessService::~ProcessService()
     disconnect(process, SIGNAL(started()), this, SLOT(onProcessStarted()));
     disconnect(process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onErrorOccurred(QProcess::ProcessError)));
 
-    if(process)
+    if(process && process->isOpen())
     {
-        if(process->isOpen())
-        {
-            process->close();
-        }
+        process->close();
         delete process;
     }
 }
@@ -57,18 +54,6 @@ void ProcessService::startApp()
     process->start(program);
 }
 
-QString ProcessService::findAppFullPath() const
-{
-    QDir dir(_processConfig.path);
-    QFileInfoList list = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach(QFileInfo finfo, list)
-    {
-        qDebug() <<  finfo.fileName();
-    }
-
-    return  "...";
-}
-
 bool ProcessService::running() const
 {
     return _running;
@@ -84,7 +69,6 @@ void ProcessService::stopApp()
 {
     process->close();
 }
-
 
 void ProcessService::start()
 {

@@ -21,9 +21,9 @@ void ConfigParser::parse(const QString& configData)
 {
     try
     {
-//      qDebug()<<"configData................"<<endl;
-//      qDebug()<<configData <<endl;
-//      qDebug()<<"configData................"<<endl;
+        //      qDebug()<<"configData................"<<endl;
+        //      qDebug()<<configData <<endl;
+        //      qDebug()<<"configData................"<<endl;
         QJsonDocument jsonDoc = QJsonDocument::fromJson(configData.toUtf8());
         QJsonObject jsonObj   = jsonDoc.object();
 
@@ -49,7 +49,7 @@ MainConfig ConfigParser::parseConfigData(const QJsonObject& jsonObj)
     configData.configUpdateUrl = jsonObj["configUpdateUrl"].toString();
     configData.needRemoteUpdate = jsonObj["needRemoteUpdate"].toBool();
     configData.standId = jsonObj["standId"].toInt();
-    configData.appTypeId = jsonObj["appTypeId"].toInt();
+    configData.workingDirectory = jsonObj["workingDirectory"].toInt();
     return configData;
 }
 
@@ -64,9 +64,14 @@ ProcessConfig ConfigParser::parseProcessData(const QJsonObject& jsonObj)
 UpdateConfig ConfigParser::parseUpdateData(const QJsonObject& jsonObj)
 {
     UpdateConfig update;
-    update.folderCheck = jsonObj["folderCheck"].toString();
+    update.checkDirectory = jsonObj["checkDirectory"].toString();
     update.lastUpdateDate = jsonObj["lastUpdateDate"].toString();
-    update.frequency = jsonObj["frequency"].toInt();
+    update.millsCheck = jsonObj["millsCheck"].toInt();
     update.autocheck = jsonObj["autocheck"].toBool();
+    update.patternCheck = jsonObj["patternCheck"].toString();
+    update.releaseDirectory = jsonObj["releaseDirectory"].toString();
+    update.tempDirectory = jsonObj["tempDirectory"].toString();
+    update.oldDirectory = jsonObj["oldDirectory"].toString();
+    update.folderSeparator = jsonObj["folderSeparator"].toString();
     return update;
 }

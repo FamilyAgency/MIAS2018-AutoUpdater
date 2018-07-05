@@ -29,6 +29,7 @@ public:
     Q_ENUMS(UpdateState)
 
     Q_INVOKABLE void checkUpdate();
+    Q_INVOKABLE void startUpdate();
 
     virtual void start() override;
     virtual void stop() override;
@@ -36,10 +37,7 @@ public:
     virtual void setQmlContext(QQmlContext* qmlContext);
     virtual void setConfig(ConfigPtr value) override;
 
-    virtual void loadUpdate(QStringList& fileList);
-
-    void startUpdate();
-    bool hasUpdate(QStringList& fileList);
+    bool hasUpdate(QDir& newBuildDir);
 
     int timeToUpdate() const;
     void setTimeToUpdate(int);
@@ -57,9 +55,9 @@ private:
     QTimer* timer;
     int _timeToUpdate = 0;
     bool _needUpdate = false;
+    QDir newBuildDir = "";
 
-    void recurseAddDir(const QDir& fromDir, QStringList& list);
-    bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
+   bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
 
 signals:
     void pendingUpdate();

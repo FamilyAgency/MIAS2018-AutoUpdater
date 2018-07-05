@@ -41,14 +41,13 @@ void UpdaterService::start()
     {
         startTime = QDateTime::currentMSecsSinceEpoch();
         timer->start(taskTimerMills) ;
-        qDebug()<<"updaterService start";
     }
 }
 
 void UpdaterService::onUpdate()
 {
     int time = QDateTime::currentMSecsSinceEpoch() - startTime;
-    int diff = _updateConfig.frequency - time;
+    int diff = _updateConfig.millsCheck - time;
     if(diff > 0)
     {
         setTimeToUpdate(diff / 1000 + 1);
@@ -56,7 +55,7 @@ void UpdaterService::onUpdate()
     else
     {
         timer->stop();
-        checkUpdate();
+        checkUpdate();       
     }
 }
 
@@ -71,24 +70,24 @@ void UpdaterService::stop()
 }
 
 void UpdaterService::checkUpdate()
-{
-    // startTime = QDateTime::currentMSecsSinceEpoch();
-    // timer->start();
-     QStringList fileList;
-    if(hasUpdate(fileList))
+{ 
+    newBuildDir.setPath("");
+    bool updateCome = hasUpdate(newBuildDir);
+    qDebug()<<"updateCome "<<updateCome;
+
+    if(updateCome)
     {
-        loadUpdate(fileList);
+        emit pendingUpdate();
     }
 }
 
-bool UpdaterService::hasUpdate(QStringList& fileList)
+bool UpdaterService::hasUpdate(QDir& newBuildDir)
 {
     int lastVersionNum = config->configData.version;
+    bool foundNewVersion = false;
 
-    QDir dir(_updateConfig.folderCheck);
+    QDir dir(_updateConfig.checkDirectory);
     QFileInfoList list = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-    QDir newBuildDir = "";
 
     foreach(QFileInfo finfo, list)
     {
@@ -103,21 +102,13 @@ bool UpdaterService::hasUpdate(QStringList& fileList)
             {
                 lastVersionNum = versionNew;
                 newBuildDir = finfo.absoluteFilePath();
+                foundNewVersion = true;
             }
         }
     }
-   // recurseAddDir(newBuildDir, fileList);
 
-    qDebug()<<"file nums : "<<fileList.length();
-    qDebug()<<"file nums : "<<newBuildDir.absolutePath();
-
-    QDir destDir = "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process\\release_temp";
-    qDebug()<<"........ "<<newBuildDir.absolutePath()<<destDir.absolutePath();
-    copyPath(newBuildDir.absolutePath(), destDir.absolutePath(), true);
-
-
-    setNeedUpdate(fileList.count() > 0 );
-    return _needUpdate;
+    setNeedUpdate(foundNewVersion);
+    return foundNewVersion;
 }
 
 bool UpdaterService::needUpdate() const
@@ -129,33 +120,6 @@ void UpdaterService::setNeedUpdate(bool value)
 {
     _needUpdate = value;
     emit needUpdateChanged();
-}
-
-void UpdaterService::recurseAddDir(const QDir& fromDir, QStringList& list)
-{
-    QStringList qsl = fromDir.entryList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-
-    foreach (QString file, qsl)
-    {
-
-        QFileInfo finfo(QString("%1/%2").arg(fromDir.path()).arg(file));
-
-        if (finfo.isSymLink())
-        {
-            return;
-        }
-
-        if (finfo.isDir())
-        {
-            QString dirname = finfo.fileName();
-            QDir sd(finfo.filePath());
-            recurseAddDir(sd, list);
-        }
-        else
-        {
-            list << QDir::toNativeSeparators(finfo.filePath());
-        }
-    }
 }
 
 bool UpdaterService::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory)
@@ -186,7 +150,6 @@ bool UpdaterService::copyPath(QString sourceDir, QString destinationDir, bool ov
         QString destinationPath = destinationDir + "/" + directoryName;
         originDirectory.mkpath(destinationPath);
         copyPath(sourceDir + "/" + directoryName, destinationPath, overWriteDirectory);
-
     }
 
     foreach (QString fileName, originDirectory.entryList(QDir::Files))
@@ -210,11 +173,6 @@ bool UpdaterService::copyPath(QString sourceDir, QString destinationDir, bool ov
     return false;
 }
 
-void UpdaterService::loadUpdate(QStringList& fileList)
-{
-
-}
-
 void UpdaterService::onUpdateLoaded()
 {
     emit pendingUpdate();
@@ -222,8 +180,30 @@ void UpdaterService::onUpdateLoaded()
 
 void UpdaterService::startUpdate()
 {
-    //rename apps;
-    //emit updateComplete();
+    QDir processDir = "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process";
+    QString releaseCurrent = "release";
+    QString releaseTemp = "release_temp";
+    QString releaseOld = "release_old";
+    QString separator = "\\";
+    if(!newBuildDir.path().isEmpty())
+    {
+        QDir destDir = processDir.absolutePath() + separator + releaseTemp;
+        bool status = copyPath(newBuildDir.absolutePath(), destDir.absolutePath(), true);
+        if(status)
+        {
+            bool status = false;
+            status = processDir.rename(releaseCurrent, releaseOld);
+            qDebug()<<"..rename status 1..... "<<status;
+            status = processDir.rename(releaseTemp, releaseCurrent);
+            qDebug()<<"..rename status 2..... "<<status;
+            QDir removeDir = processDir.absolutePath() + separator + releaseOld;
+            status =  removeDir.removeRecursively();
+            qDebug()<<"..remove status..... "<<status;
+        }
+    }
+    setNeedUpdate(false);
+    emit updateComplete();
+    start();
 }
 
 QString UpdaterService::getName() const

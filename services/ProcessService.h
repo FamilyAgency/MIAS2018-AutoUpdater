@@ -36,8 +36,6 @@ private:
     QString program;
     bool _running = false;
 
-    QString findAppFullPath() const;
-
 signals:
     void runningChanged();
     void processConfigChanged();

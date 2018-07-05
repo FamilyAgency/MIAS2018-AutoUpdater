@@ -23,14 +23,14 @@ private:
     Q_PROPERTY(QString configUpdateUrl MEMBER configUpdateUrl)
     Q_PROPERTY(bool needRemoteUpdate MEMBER needRemoteUpdate)
     Q_PROPERTY(int standId MEMBER standId)
-    Q_PROPERTY(int appTypeId MEMBER appTypeId)
+    Q_PROPERTY(QString workingDirectory MEMBER workingDirectory)
 
  public:
     int version;
     QString configUpdateUrl;
     bool needRemoteUpdate;
     int standId;
-    int appTypeId;
+    QString workingDirectory;
 };
 Q_DECLARE_METATYPE(MainConfig)
 
@@ -51,16 +51,26 @@ struct UpdateConfig
 {
 private:
     Q_GADGET
-    Q_PROPERTY(QString folderCheck MEMBER folderCheck)
+    Q_PROPERTY(QString checkDirectory MEMBER checkDirectory)
     Q_PROPERTY(QString lastUpdateDate MEMBER lastUpdateDate)
-    Q_PROPERTY(int frequency MEMBER frequency)
+    Q_PROPERTY(int millsCheck MEMBER millsCheck)
     Q_PROPERTY(bool autocheck MEMBER autocheck)
+    Q_PROPERTY(QString patternCheck MEMBER patternCheck)
+    Q_PROPERTY(QString releaseDirectory MEMBER releaseDirectory)
+    Q_PROPERTY(QString tempDirectory MEMBER tempDirectory)
+    Q_PROPERTY(QString oldDirectory MEMBER oldDirectory)
+    Q_PROPERTY(QString folderSeparator MEMBER folderSeparator)
 
 public:
-    QString folderCheck = "";
+    QString checkDirectory = "";
     QString lastUpdateDate = "";
-    int frequency = 100000;
+    int millsCheck = 100000;
     bool autocheck = false;
+    QString patternCheck = "";
+    QString releaseDirectory = "";
+    QString tempDirectory = "";
+    QString oldDirectory = "";
+    QString folderSeparator = "";
 };
 Q_DECLARE_METATYPE(UpdateConfig)
 

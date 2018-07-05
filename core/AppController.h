@@ -28,15 +28,13 @@ public:
     virtual ~AppController();
 
 public:
-    void setQmlContext(QQmlContext* qmlContext);
-
     Q_INVOKABLE void start();
+    void setQmlContext(QQmlContext* qmlContext);   
 
 private:
     QSharedPointer<StandData> standData;
     QSharedPointer<ProcessService> processService;
     QSharedPointer<UpdaterService> updaterService;
-    Config* config = nullptr;
 
 public slots:
     void onConfigLoaded(ConfigPtr config);
@@ -47,8 +45,8 @@ private slots:
     void onUpdateComplete();
     void onUpdateError();
     void onUpdateLoadingError();
-
     void onProcessStopped(int value);
+    void startUpWithDelay();
 };
 
 #endif // APPCOPCONTROLLER_H

@@ -84,7 +84,7 @@ Item {
 
                 onClicked:
                 {
-
+                    updaterService.startUpdate();
                 }
             }
 

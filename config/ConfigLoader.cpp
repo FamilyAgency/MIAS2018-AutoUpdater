@@ -4,7 +4,9 @@
 
 ConfigLoader::ConfigLoader()
 {
-
+    httpClient.reset(new HTTPClient());
+    connect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
+    connect(httpClient.data(), SIGNAL(httpRequestFailed()), this, SLOT(httpRequestFailedHandler()));
 }
 
 void ConfigLoader::load(CONFIG_LOAD_METHOD method, const QString& path)
@@ -28,15 +30,6 @@ void ConfigLoader::load(CONFIG_LOAD_METHOD method, const QString& path)
     }
     else if(method == CONFIG_LOAD_METHOD::URL)
     {
-        if (httpClient)
-        {
-            disconnect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
-            disconnect(httpClient.data(), SIGNAL(httpRequestFailed()), this, SLOT(httpRequestFailedHandler()));
-        }
-        httpClient.reset(new HTTPClient());
-        connect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
-        connect(httpClient.data(), SIGNAL(httpRequestFailed()), this, SLOT(httpRequestFailedHandler()));
-
         qDebug()<<"config url " << path;
         httpClient->runRequest(path);
     }

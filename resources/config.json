@@ -2,19 +2,23 @@
     "version" : 13,
     "configUpdateUrl" : "http://familyagency.ru/lab/synapse/digitalframes/config.json",
     "needRemoteUpdate": false,
-    "standId": 12,
-    "appTypeId": 1,    
+    "standId": 1,
+    "workingDirectory" : "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process",
     "update":
     {
-        "folderCheck" : "c:\\projects\\Qt\\MIAS2018\\testBuilds\\",
-        "frequency": 10000,
-        "autocheck": false,
-        "lastUpdateDate": "04.07.2018"
-
+        "checkDirectory" : "c:\\projects\\Qt\\MIAS2018\\testBuilds\\",
+        "lastUpdateDate": "04.07.2018",
+        "millsCheck": 10000,
+        "autocheck": true,
+        "patternCheck":"",
+        "releaseDirectory":"release",
+        "tempDirectory":"release_temp",
+        "oldDirectory":"release_old",
+        "folderSeparator":"\\"
     },
     "process":
     {
-        "path" : "c:\\projects\\Qt\\MIAS2018\\StandClient\\release\\MindwaveGameClient.exe",
+        "name" : "MindwaveGameClient.exe",
         "autorun" : false
     }
 }

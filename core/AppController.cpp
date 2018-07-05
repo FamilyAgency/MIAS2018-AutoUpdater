@@ -41,17 +41,32 @@ void AppController::onConfigLoaded(ConfigPtr config)
 
 void AppController::onPendingUpdate()
 {
-    processService->stopApp();
+    if(processService->running())
+    {
+        processService->stopApp();
+    }
+    else
+    {
+        updaterService->startUpdate();
+    }
 }
 
 void AppController::onUpdateComplete()
+{
+    QTimer::singleShot(2000, this, SLOT(startUpWithDelay()));
+}
+
+void AppController::startUpWithDelay()
 {
     processService->startApp();
 }
 
 void AppController::onProcessStopped(int value)
 {
-    updaterService->startUpdate();
+    if(updaterService->needUpdate())
+    {
+        updaterService->startUpdate();
+    }
 }
 
 void AppController::onUpdateError()
