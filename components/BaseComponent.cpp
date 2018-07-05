@@ -14,3 +14,8 @@ QString BaseComponent::getName() const
 {
     return name;
 }
+
+void BaseComponent::setConfig(ConfigPtr value)
+{
+    config = value;
+}

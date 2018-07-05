@@ -12,6 +12,8 @@ AppController::AppController(QObject *parent) : QObject(parent)
     connect(updaterService.data(), SIGNAL(updateComplete(bool, int)), this, SLOT(onUpdateComplete(bool, int)));
     connect(updaterService.data(), SIGNAL(updateError()), this, SLOT(onUpdateError()));
     connect(updaterService.data(), SIGNAL(updateLoadingError()), this, SLOT(onUpdateLoadingError()));
+
+    monitoringComponent.reset(new MonitoringComponent());
 }
 
 AppController::~AppController()
@@ -33,9 +35,7 @@ void AppController::setQmlContext(QQmlContext* qmlContext)
 void AppController::onConfigLoaded(ConfigPtr value)
 {
     config = value;
-    updateAllConfigs();
-    updaterService->start();
-    processService->start();
+    start();
 }
 
 void AppController::onPendingUpdate()
@@ -87,7 +87,10 @@ void AppController::onConfigError()
 
 void AppController::start()
 {
-
+    updateAllConfigs();
+    updaterService->start();
+    processService->start();
+    monitoringComponent->start();
 }
 
 void AppController::updateAllConfigs()
@@ -95,4 +98,5 @@ void AppController::updateAllConfigs()
     updaterService->setConfig(config);
     standData->setConfig(config);
     processService->setConfig(config);
+    monitoringComponent->setConfig(config);
 }

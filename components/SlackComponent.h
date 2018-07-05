@@ -5,8 +5,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "components/BaseComponent.h"
-#include "config/Config.h"
-#include "core/Types.h"
 
 class SlackComponent : public BaseComponent
 {
@@ -14,12 +12,12 @@ class SlackComponent : public BaseComponent
 public:
     explicit SlackComponent(QObject *parent = nullptr);
     virtual ~SlackComponent();
-    void SlackComponent::sendMessage(const QString& msg, const QString& channel);
-    virtual void setConfig(ConfigPtr value);
+    void sendMessage(const QString& msg, const QString& channel);
+    virtual void setConfig(ConfigPtr value) override;
 
 private:
    QNetworkAccessManager* networkManager;
-   ConfigPtr config;
+   QSharedPointer<SlackConfig> slackConfig;
 
 private slots:
    void httpRequestSuccessHandler(QNetworkReply* reply);

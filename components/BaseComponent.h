@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QQmlContext>
+#include "core/Types.h"
+#include "config/Config.h"
 
 class BaseComponent : public QObject
 {
@@ -12,10 +14,12 @@ public:
     virtual void setQmlContext(QQmlContext* value);
     virtual QString getName() const;
     virtual void start(){}
+    virtual void setConfig(ConfigPtr value);
 
 protected:
     QQmlContext* qmlContext;
     QString name = "";
+    ConfigPtr config;
 
 signals:
 

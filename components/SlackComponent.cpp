@@ -21,12 +21,13 @@ SlackComponent::~SlackComponent()
 
 void SlackComponent::setConfig(ConfigPtr value)
 {
-    config = value;
+    BaseComponent::setConfig(value);
+    slackConfig = value->slackConfig;
 }
 
 void SlackComponent::sendMessage(const QString& msg, const QString& channel)
 {
-    if(config->slackConfig->enabled)
+    if(slackConfig->enabled)
     {
         return;
     }
