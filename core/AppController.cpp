@@ -5,15 +5,18 @@ AppController::AppController(QObject *parent) : QObject(parent)
     standData.reset(new StandData());
 
     processService.reset(new ProcessService());
+    services.push_back(processService);
     connect(processService.data(), SIGNAL(processStopped(int)), this, SLOT(onProcessStopped(int)));
 
     updaterService.reset(new UpdaterService());
+    services.push_back(updaterService);
     connect(updaterService.data(), SIGNAL(pendingUpdate()), this, SLOT(onPendingUpdate()));
     connect(updaterService.data(), SIGNAL(updateComplete(bool, int)), this, SLOT(onUpdateComplete(bool, int)));
     connect(updaterService.data(), SIGNAL(updateError()), this, SLOT(onUpdateError()));
     connect(updaterService.data(), SIGNAL(updateLoadingError()), this, SLOT(onUpdateLoadingError()));
 
     monitoringComponent.reset(new MonitoringComponent());
+    components.push_back(monitoringComponent);
 }
 
 AppController::~AppController()
@@ -28,8 +31,11 @@ AppController::~AppController()
 void AppController::setQmlContext(QQmlContext* qmlContext)
 {
     standData->setQmlContext(qmlContext);
-    processService->setQmlContext(qmlContext);
-    updaterService->setQmlContext(qmlContext);
+
+    for(auto service: services)
+    {
+        service->setQmlContext(qmlContext);
+    }
 }
 
 void AppController::onConfigLoaded(ConfigPtr value)
@@ -58,7 +64,7 @@ void AppController::onUpdateComplete(bool runApp, int newBuildVersion)
 
     if(runApp)
     {
-         processService->startApp();
+        processService->startApp();
     }
 }
 
@@ -88,15 +94,28 @@ void AppController::onConfigError()
 void AppController::start()
 {
     updateAllConfigs();
-    updaterService->start();
-    processService->start();
-    monitoringComponent->start();
+    for(auto service: services)
+    {
+        service->start();
+    }
+
+    for(auto comp: components)
+    {
+        comp->start();
+    }
 }
 
 void AppController::updateAllConfigs()
 {
-    updaterService->setConfig(config);
     standData->setConfig(config);
-    processService->setConfig(config);
-    monitoringComponent->setConfig(config);
+
+    for(auto service: services)
+    {
+        service->setConfig(config);
+    }
+
+    for(auto comp: components)
+    {
+        comp->setConfig(config);
+    }
 }

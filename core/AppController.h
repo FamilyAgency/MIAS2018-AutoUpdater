@@ -39,6 +39,9 @@ private:
     QSharedPointer<UpdaterService> updaterService;
     QSharedPointer<MonitoringComponent> monitoringComponent;
 
+    QList<QSharedPointer<BaseComponent>> components;
+    QList<QSharedPointer<BaseService>> services;
+
     ConfigPtr config;
 
     void updateAllConfigs();
