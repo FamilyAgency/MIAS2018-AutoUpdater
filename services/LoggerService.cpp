@@ -6,10 +6,11 @@ LoggerService::LoggerService(QObject *parent) : BaseService(parent)
    slackComponent.reset(new SlackComponent());
 }
 
-void LoggerService::setConfig(ConfigPtr config)
+void LoggerService::setConfig(ConfigPtr value)
 {
-    BaseService::setConfig(config);
-    standId = config->mainConfig->standId;
+    BaseService::setConfig(value);
+    standId = value->mainConfig->standId;
+    slackComponent->setConfig(value);
 }
 
 void LoggerService::setQmlContext(QQmlContext* qmlContext)
@@ -20,7 +21,7 @@ void LoggerService::setQmlContext(QQmlContext* qmlContext)
 void LoggerService::log(const QString& message, LogType type, LogRemoteType remoteType, bool saveLocal)
 {
     QDateTime now = QDateTime::currentDateTime();
-    QString logMessage = "[" +now.date().toString() + " " +  now.time().toString() + "] : Stand " + QString::number(standId) + " :  " + message;
+    QString logMessage = "[" + now.date().toString() + " " + now.time().toString() + "] : Stand " + QString::number(standId) + " :  " + message;
 
     qDebug()<<logMessage;
 
@@ -31,7 +32,6 @@ void LoggerService::log(const QString& message, LogType type, LogRemoteType remo
         break;
 
     case LogRemoteType::Server:
-
         break;
     }
 

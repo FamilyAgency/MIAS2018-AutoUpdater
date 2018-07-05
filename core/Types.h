@@ -8,8 +8,6 @@
 #include <QList>
 #include <QJsonObject>
 
-
-
 struct MainConfig
 {
 private:
@@ -81,12 +79,27 @@ private:
     Q_GADGET
     Q_PROPERTY(QString logChannel MEMBER logChannel)
     Q_PROPERTY(QString errorChannel MEMBER errorChannel)
+    Q_PROPERTY(bool enabled MEMBER enabled)
 
 public:
     QString logChannel = "";
     QString errorChannel = "";
+    bool enabled = false;
 };
 Q_DECLARE_METATYPE(SlackConfig)
+
+struct MonitoringConfig
+{
+private:
+    Q_GADGET
+    Q_PROPERTY(int memoryCheckMills MEMBER memoryCheckMills)
+    Q_PROPERTY(bool enabled MEMBER enabled)
+
+public:
+    int memoryCheckMills = 10000;
+    bool enabled = false;
+};
+Q_DECLARE_METATYPE(MonitoringConfig)
 
 
 

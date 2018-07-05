@@ -22,12 +22,11 @@ public slots:
 
 private:
     ConfigPtr config;
-
     void parseMainConfig(QSharedPointer<MainConfig> mainConfig, const QJsonObject& jsonObj);
     void parseProcessConfig(QSharedPointer<ProcessConfig> processConfig, const QJsonObject& jsonObj);
     void parseUpdateConfig(QSharedPointer<UpdateConfig> updateConfig, const QJsonObject& jsonObj);
     void parseSlackConfig(QSharedPointer<SlackConfig> slackConfig, const QJsonObject& jsonObj);
-
+    void parseMonitoringConfig(QSharedPointer<MonitoringConfig> monitoringConfig, const QJsonObject& jsonObj);
 };
 
 #endif // CONFIGPARSER_H

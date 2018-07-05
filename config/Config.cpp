@@ -6,6 +6,7 @@ Config::Config()
     processConfig.reset(new ProcessConfig);
     updateConfig.reset(new UpdateConfig);
     slackConfig.reset(new SlackConfig);
+    monitoringConfig.reset(new MonitoringConfig);
 }
 
 QString Config::getRawData() const

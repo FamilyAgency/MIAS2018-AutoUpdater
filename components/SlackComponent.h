@@ -15,9 +15,11 @@ public:
     explicit SlackComponent(QObject *parent = nullptr);
     virtual ~SlackComponent();
     void SlackComponent::sendMessage(const QString& msg, const QString& channel);
+    virtual void setConfig(ConfigPtr value);
 
 private:
    QNetworkAccessManager* networkManager;
+   ConfigPtr config;
 
 private slots:
    void httpRequestSuccessHandler(QNetworkReply* reply);

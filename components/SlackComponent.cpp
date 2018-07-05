@@ -19,8 +19,18 @@ SlackComponent::~SlackComponent()
     }
 }
 
+void SlackComponent::setConfig(ConfigPtr value)
+{
+    config = value;
+}
+
 void SlackComponent::sendMessage(const QString& msg, const QString& channel)
 {
+    if(config->slackConfig->enabled)
+    {
+        return;
+    }
+
     QJsonObject recordObject;
     recordObject.insert("text", QJsonValue::fromVariant(msg));
 
