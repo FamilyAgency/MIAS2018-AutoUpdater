@@ -4,21 +4,22 @@
     "needRemoteUpdate": false,
     "standId": 1,
     "workingDirectory" : "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process",
+    "folderSeparator":"\\",
     "update":
     {
         "checkDirectory" : "c:\\projects\\Qt\\MIAS2018\\testBuilds\\",
         "lastUpdateDate": "04.07.2018",
         "millsCheck": 10000,
-        "autocheck": true,
+        "autocheck": false,
         "patternCheck":"",
         "releaseDirectory":"release",
         "tempDirectory":"release_temp",
         "oldDirectory":"release_old",
-        "folderSeparator":"\\"
+        "runAppAfterUpdate" : false
     },
     "process":
     {
-        "name" : "MindwaveGameClient.exe",
+        "path" : "release\\MindwaveGameClient.exe",
         "autorun" : false
     }
 }

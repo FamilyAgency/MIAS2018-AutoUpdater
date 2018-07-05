@@ -41,7 +41,7 @@ void AppController::onConfigLoaded(ConfigPtr config)
 
 void AppController::onPendingUpdate()
 {
-    if(processService->running())
+    if(processService->processState() != ProcessService::ProcessState::Stopped)
     {
         processService->stopApp();
     }
@@ -53,12 +53,7 @@ void AppController::onPendingUpdate()
 
 void AppController::onUpdateComplete()
 {
-    QTimer::singleShot(2000, this, SLOT(startUpWithDelay()));
-}
-
-void AppController::startUpWithDelay()
-{
-    processService->startApp();
+   processService->startApp();
 }
 
 void AppController::onProcessStopped(int value)

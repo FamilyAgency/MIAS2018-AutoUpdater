@@ -25,7 +25,6 @@ void UpdaterService::setQmlContext(QQmlContext* qmlContext)
 void UpdaterService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
-    config = value;
     setUpdateConfig(value->updateData);
 }
 

@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Styles 1.4
+import com.app 1.0
 
 Item
 {
@@ -20,7 +21,8 @@ Item
 
             Text
             {
-                text: "Porocess path: " + processService.processConfig.path;
+                id:processPath;
+                text: "Process path: " + standData.config.workingDirectory + standData.config.folderSeparator + processService.processConfig.path;
                 font.family: "Helvetica";
                 font.pixelSize: 15;
                 color: "#999999";
@@ -37,17 +39,19 @@ Item
 
             Text
             {
-                text: "Status: " + (processService.running ? "running" : "stopped");
+                id: statusText
+                text: "Status: stopped";
                 font.family: "Helvetica";
                 font.pixelSize: 15;
-                color: processService.running ? "#009900" : "#990000";
+                color: "#990000";
             }
 
             Button
             {
+                id:startBtn;
                 implicitWidth: 200;
                 text:"Start";
-                enabled: !processService.running;
+                enabled: true;
                 onClicked:
                 {
                     processService.startApp();
@@ -56,13 +60,46 @@ Item
 
             Button
             {
+                id:stopBtn;
                 implicitWidth: 200;
                 text:"Stop";
-                enabled: processService.running;
+                enabled: false;
                 onClicked:
                 {
                     processService.stopApp();
                 }
+            }
+        }
+    }
+
+    Connections
+    {
+        target:processService;
+        onProcessStateChanged:
+        {
+            switch (processService.processState)
+            {
+
+            case ProcessState.Stopped:
+                stopBtn.enabled = false;
+                startBtn.enabled = true;
+                statusText.text = "Process stopped";
+                statusText.color = "#990000";
+                break;
+
+            case ProcessState.PendingStart:
+                stopBtn.enabled = false;
+                startBtn.enabled = false;
+                statusText.text = "Process starting.....";
+                statusText.color = "#999900";
+                break;
+
+            case ProcessState.Running:
+                stopBtn.enabled = true;
+                startBtn.enabled = false;
+                statusText.text = "Process running";
+                statusText.color = "#009900";
+                break;
             }
         }
     }

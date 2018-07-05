@@ -8,15 +8,24 @@
 class ProcessService : public BaseService
 {
     Q_OBJECT
-    Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+    Q_PROPERTY(ProcessState processState READ processState WRITE setProcessState NOTIFY processStateChanged)
     Q_PROPERTY(ProcessConfig processConfig READ processConfig WRITE setProcesConfig NOTIFY processConfigChanged)
 
 public:
+    enum class ProcessState
+    {
+       Stopped,
+       PendingStart,
+       Running
+    };
+    Q_ENUMS(ProcessState)
+
     explicit ProcessService(QObject *parent = nullptr);
     virtual ~ProcessService();
 
     Q_INVOKABLE void startApp();
     Q_INVOKABLE void stopApp();
+    Q_INVOKABLE QString getProcessFullPath() const;
 
     virtual void start() override;
     virtual void stop() override;
@@ -27,17 +36,17 @@ public:
     void setProcesConfig(const ProcessConfig& config);
     ProcessConfig processConfig() const;
 
-    bool running() const;
-    void setRunning(bool value);
+    ProcessState processState() const;
+    void setProcessState(ProcessState value);
 
 private:
     ProcessConfig _processConfig;
     QProcess *process;   
     QString program;
-    bool _running = false;
+    ProcessState _processState = ProcessState::Stopped;
 
 signals:
-    void runningChanged();
+    void processStateChanged();
     void processConfigChanged();
     void processStopped(int value);
 
@@ -46,6 +55,8 @@ private slots:
     void onProcessFinished(int value);
     void onProcessStarted();
     void onErrorOccurred(QProcess::ProcessError error);
+
+    void startUpWithDelay();
 };
 
 #endif // PROCESSSERVICE_H

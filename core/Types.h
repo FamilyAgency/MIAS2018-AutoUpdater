@@ -24,6 +24,7 @@ private:
     Q_PROPERTY(bool needRemoteUpdate MEMBER needRemoteUpdate)
     Q_PROPERTY(int standId MEMBER standId)
     Q_PROPERTY(QString workingDirectory MEMBER workingDirectory)
+    Q_PROPERTY(QString folderSeparator MEMBER folderSeparator)
 
  public:
     int version;
@@ -31,6 +32,7 @@ private:
     bool needRemoteUpdate;
     int standId;
     QString workingDirectory;
+    QString folderSeparator = "\\";
 };
 Q_DECLARE_METATYPE(MainConfig)
 
@@ -59,7 +61,8 @@ private:
     Q_PROPERTY(QString releaseDirectory MEMBER releaseDirectory)
     Q_PROPERTY(QString tempDirectory MEMBER tempDirectory)
     Q_PROPERTY(QString oldDirectory MEMBER oldDirectory)
-    Q_PROPERTY(QString folderSeparator MEMBER folderSeparator)
+    Q_PROPERTY(bool runAppAfterUpdate MEMBER runAppAfterUpdate)
+
 
 public:
     QString checkDirectory = "";
@@ -70,7 +73,7 @@ public:
     QString releaseDirectory = "";
     QString tempDirectory = "";
     QString oldDirectory = "";
-    QString folderSeparator = "";
+    bool runAppAfterUpdate = false;
 };
 Q_DECLARE_METATYPE(UpdateConfig)
 

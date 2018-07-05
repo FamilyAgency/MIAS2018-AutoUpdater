@@ -1,5 +1,6 @@
 #include "ProcessService.h"
 #include <QDirIterator>
+#include <QTimer>
 
 ProcessService::ProcessService(QObject *parent) : BaseService(parent)
 {
@@ -33,8 +34,14 @@ void ProcessService::setQmlContext(QQmlContext* qmlContext)
 void ProcessService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
-    config = value;
     setProcesConfig(value->processData);
+}
+
+QString ProcessService::getProcessFullPath() const
+{
+    return config->configData.workingDirectory +
+           config->configData.folderSeparator +
+           _processConfig.path;
 }
 
 void ProcessService::setProcesConfig(const ProcessConfig& value)
@@ -48,28 +55,6 @@ ProcessConfig ProcessService::processConfig() const
     return _processConfig;
 }
 
-void ProcessService::startApp()
-{
-    program = _processConfig.path;
-    process->start(program);
-}
-
-bool ProcessService::running() const
-{
-    return _running;
-}
-
-void ProcessService::setRunning(bool value)
-{
-    _running = value;
-    emit runningChanged();
-}
-
-void ProcessService::stopApp()
-{
-    process->close();
-}
-
 void ProcessService::start()
 {
     if(_processConfig.autorun)
@@ -80,7 +65,50 @@ void ProcessService::start()
 
 void ProcessService::stop()
 {
+    stopApp();
+}
 
+void ProcessService::startApp()
+{
+    if(_processState == ProcessState::Stopped)
+    {
+       setProcessState(ProcessState::PendingStart);
+       QTimer::singleShot(2000, this, SLOT(startUpWithDelay()));
+    }
+}
+
+void ProcessService::startUpWithDelay()
+{
+    program = getProcessFullPath();
+    process->start(program);
+}
+
+void ProcessService::onProcessStarted()
+{
+    qDebug()<<"process Started";
+    setProcessState(ProcessState::Running);
+}
+
+void ProcessService::stopApp()
+{
+    process->close();
+}
+
+void ProcessService::onProcessFinished(int value)
+{
+   setProcessState(ProcessState::Stopped);
+   emit processStopped(value);
+}
+
+ProcessService::ProcessState ProcessService::processState() const
+{
+    return _processState;
+}
+
+void ProcessService::setProcessState(ProcessState value)
+{
+    _processState = value;
+    emit processStateChanged();
 }
 
 QString ProcessService::getName() const
@@ -93,18 +121,9 @@ void ProcessService::onReadyReadStandardError()
     qDebug()<<"ready Read Standard Error";
 }
 
-void ProcessService::onProcessFinished(int value)
-{
-    qDebug()<<"process Finished";
-    setRunning(false);
-    emit processStopped(value);
-}
 
-void ProcessService::onProcessStarted()
-{
-    qDebug()<<"process Started";
-    setRunning(true);
-}
+
+
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)
 {

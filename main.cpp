@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
     QObject::connect(configController.data(), SIGNAL(configServiceError()), appController.data(), SLOT(onConfigError()));
 
     qmlRegisterType<AppController>("com.app", 1, 0, "AppState");
+    qmlRegisterType<ProcessService>("com.app", 1, 0, "ProcessState");
+
     engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
 
     if (engine.rootObjects().isEmpty())

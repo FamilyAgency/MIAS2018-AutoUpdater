@@ -21,9 +21,9 @@ void ConfigParser::parse(const QString& configData)
 {
     try
     {
-        //      qDebug()<<"configData................"<<endl;
-        //      qDebug()<<configData <<endl;
-        //      qDebug()<<"configData................"<<endl;
+        //qDebug()<<"configData................"<<endl;
+        //qDebug()<<configData <<endl;
+        //qDebug()<<"configData................"<<endl;
         QJsonDocument jsonDoc = QJsonDocument::fromJson(configData.toUtf8());
         QJsonObject jsonObj   = jsonDoc.object();
 
@@ -49,7 +49,8 @@ MainConfig ConfigParser::parseConfigData(const QJsonObject& jsonObj)
     configData.configUpdateUrl = jsonObj["configUpdateUrl"].toString();
     configData.needRemoteUpdate = jsonObj["needRemoteUpdate"].toBool();
     configData.standId = jsonObj["standId"].toInt();
-    configData.workingDirectory = jsonObj["workingDirectory"].toInt();
+    configData.workingDirectory = jsonObj["workingDirectory"].toString();
+    configData.folderSeparator = jsonObj["folderSeparator"].toString();
     return configData;
 }
 
@@ -72,6 +73,7 @@ UpdateConfig ConfigParser::parseUpdateData(const QJsonObject& jsonObj)
     update.releaseDirectory = jsonObj["releaseDirectory"].toString();
     update.tempDirectory = jsonObj["tempDirectory"].toString();
     update.oldDirectory = jsonObj["oldDirectory"].toString();
-    update.folderSeparator = jsonObj["folderSeparator"].toString();
+    update.runAppAfterUpdate = jsonObj["runAppAfterUpdate"].toBool();
+
     return update;
 }
