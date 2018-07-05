@@ -203,11 +203,12 @@ void UpdaterService::forceStartUpdate()
 
 void UpdaterService::startUpdate()
 {
-    QDir processDir = config->mainConfig->workingDirectory;// "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process";
-    QString releaseCurrent = _updateConfig.releaseDirectory;// "release";
-    QString releaseTemp = _updateConfig.tempDirectory;//"release_temp";
-    QString releaseOld = _updateConfig.oldDirectory;//"release_old";
-    QString separator = config->mainConfig->folderSeparator;//"\\";
+    QDir processDir = config->mainConfig->workingDirectory;
+    QString releaseCurrent = _updateConfig.releaseDirectory;
+    QString releaseTemp = _updateConfig.tempDirectory;
+    QString releaseOld = _updateConfig.oldDirectory;
+    QString separator = config->mainConfig->folderSeparator;
+
     if(!newBuildDir.path().isEmpty())
     {
         QDir destDir = processDir.absolutePath() + separator + releaseTemp;
@@ -231,6 +232,7 @@ void UpdaterService::startUpdate()
 
 void UpdaterService::autoCheckChanged(bool value)
 {
+    //TODO
     _updateConfig.autocheck = value;
     config->updateConfig->autocheck = value;
 

@@ -82,7 +82,7 @@ void ConfigController::onConfigParsingComplete(ConfigPtr configParsed)
     case ConfigLoader::CONFIG_LOAD_METHOD::URL:
         if(saveRemote && config->valid && defaultConfigLoadingMethod!= ConfigLoader::CONFIG_LOAD_METHOD::RESOURCE_FILE)
         {
-            configWriter->save(config);
+            configWriter->save(config, getConfigPath(ConfigLoader::CONFIG_LOAD_METHOD::LOCAL_FILE));
         }        
         serviceFinished(config->valid);
         break;
@@ -128,6 +128,6 @@ void ConfigController::serviceFinished(bool success)
 
 void ConfigController::save()
 {
-    configWriter->save(config);
+    configWriter->save(config, getConfigPath(ConfigLoader::CONFIG_LOAD_METHOD::LOCAL_FILE));
 }
 

@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     }
 
     // config load. entry point
-    configController.data()->setLoadingMethod(ConfigLoader::CONFIG_LOAD_METHOD::RESOURCE_FILE);
+    configController.data()->setLoadingMethod(ConfigLoader::CONFIG_LOAD_METHOD::LOCAL_FILE);
     configController.data()->load();
 
     return app.exec();
