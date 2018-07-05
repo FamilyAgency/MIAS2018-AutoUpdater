@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QStringList>
 #include "BaseService.h"
+#include "services/LoggerService.h"
 
 class UpdaterService : public BaseService
 {
@@ -60,6 +61,7 @@ private:
     QDir newBuildDir = "";
     int newBuildVersion = 0;
 
+    QSharedPointer<LoggerService> loggerService;
 
    bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
    void resetTimer();

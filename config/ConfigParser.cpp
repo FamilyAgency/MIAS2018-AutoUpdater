@@ -27,9 +27,10 @@ void ConfigParser::parse(const QString& configData)
         QJsonDocument jsonDoc = QJsonDocument::fromJson(configData.toUtf8());
         QJsonObject jsonObj   = jsonDoc.object();
 
-        parseConfigData(config->mainConfig, jsonObj);
-        parseProcessData(config->processConfig, jsonObj["process"].toObject());
-        parseUpdateData(config->updateConfig, jsonObj["update"].toObject());
+        parseMainConfig(config->mainConfig, jsonObj);
+        parseProcessConfig(config->processConfig, jsonObj["process"].toObject());
+        parseUpdateConfig(config->updateConfig, jsonObj["update"].toObject());
+        parseSlackConfig(config->slackConfig, jsonObj["slack"].toObject());
 
         config->setRawData(configData);
         config->valid = true;
@@ -42,7 +43,7 @@ void ConfigParser::parse(const QString& configData)
     }
 }
 
-void ConfigParser::parseConfigData(QSharedPointer<MainConfig> mainConfig, const QJsonObject& jsonObj)
+void ConfigParser::parseMainConfig(QSharedPointer<MainConfig> mainConfig, const QJsonObject& jsonObj)
 {
     mainConfig->version = jsonObj["version"].toInt();
     mainConfig->configUpdateUrl = jsonObj["configUpdateUrl"].toString();
@@ -52,14 +53,14 @@ void ConfigParser::parseConfigData(QSharedPointer<MainConfig> mainConfig, const 
     mainConfig->folderSeparator = jsonObj["folderSeparator"].toString();
 }
 
-void ConfigParser::parseProcessData(QSharedPointer<ProcessConfig> processConfig, const QJsonObject& jsonObj)
+void ConfigParser::parseProcessConfig(QSharedPointer<ProcessConfig> processConfig, const QJsonObject& jsonObj)
 {
     processConfig->path = jsonObj["path"].toString();
     processConfig->autorun = jsonObj["autorun"].toBool();
     processConfig->startDelayMills = jsonObj["startDelayMills"].toInt();
 }
 
-void ConfigParser::parseUpdateData(QSharedPointer<UpdateConfig> updateConfig, const QJsonObject& jsonObj)
+void ConfigParser::parseUpdateConfig(QSharedPointer<UpdateConfig> updateConfig, const QJsonObject& jsonObj)
 {
     UpdateConfig ;
     updateConfig->checkDirectory = jsonObj["checkDirectory"].toString();
@@ -72,4 +73,10 @@ void ConfigParser::parseUpdateData(QSharedPointer<UpdateConfig> updateConfig, co
     updateConfig->oldDirectory = jsonObj["oldDirectory"].toString();
     updateConfig->runAppAfterUpdate = jsonObj["runAppAfterUpdate"].toBool();
     updateConfig->autoupdate = jsonObj["autoupdate"].toBool();
+}
+
+void ConfigParser::parseSlackConfig(QSharedPointer<SlackConfig> slackConfig, const QJsonObject& jsonObj)
+{  
+    slackConfig->logChannel = jsonObj["logChannel"].toString();
+    slackConfig->errorChannel = jsonObj["errorChannel"].toString();
 }

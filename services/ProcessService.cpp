@@ -9,6 +9,8 @@ ProcessService::ProcessService(QObject *parent) : BaseService(parent)
     connect(process, SIGNAL(finished(int)), this, SLOT(onProcessFinished(int)));
     connect(process, SIGNAL(started()), this, SLOT(onProcessStarted()));
     connect(process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onErrorOccurred(QProcess::ProcessError)));
+
+    loggerService.reset(new LoggerService());
 }
 
 ProcessService::~ProcessService()
@@ -35,6 +37,7 @@ void ProcessService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
     setProcesConfig(*value->processConfig);
+    loggerService->setConfig(value);
 }
 
 QString ProcessService::getProcessFullPath() const
@@ -72,6 +75,7 @@ void ProcessService::startApp()
 {
     if(_processState == ProcessState::Stopped)
     {
+       loggerService->log("Process pending start...", LogType::Verbose, LogRemoteType::Slack, true);
        setProcessState(ProcessState::PendingStart);
        QTimer::singleShot(_processConfig.startDelayMills, this, SLOT(startUpWithDelay()));
     }
@@ -85,7 +89,7 @@ void ProcessService::startUpWithDelay()
 
 void ProcessService::onProcessStarted()
 {
-    qDebug()<<"process Started";
+    loggerService->log("Process started", LogType::Verbose, LogRemoteType::Slack, true);
     setProcessState(ProcessState::Running);
 }
 
@@ -96,7 +100,8 @@ void ProcessService::stopApp()
 
 void ProcessService::onProcessFinished(int value)
 {
-   setProcessState(ProcessState::Stopped);
+   loggerService->log("Process stopped", LogType::Verbose, LogRemoteType::Slack, true);
+   setProcessState(ProcessState::Stopped);   
    emit processStopped(value);
 }
 

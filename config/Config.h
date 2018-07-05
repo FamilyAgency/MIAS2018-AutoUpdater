@@ -19,6 +19,7 @@ public:
     QSharedPointer<MainConfig> mainConfig;
     QSharedPointer<ProcessConfig> processConfig;
     QSharedPointer<UpdateConfig> updateConfig;
+    QSharedPointer<SlackConfig> slackConfig;
 
     QString getRawData() const;
     void setRawData(const QString& value);

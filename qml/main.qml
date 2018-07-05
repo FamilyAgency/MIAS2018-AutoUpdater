@@ -5,24 +5,24 @@ import QtQuick.Layouts 1.3
 
 ApplicationWindow
 {
-    visible: true
-    width: 1280
-    height: 720
-    title: qsTr("Auto updater")
+    visible: true;
+    width: 800;
+    height: 600;
+    title: qsTr("Auto updater");
 
     property int marginLeft:50;
-    property int marginTop:10;
+    property int marginTop:50;
     property int columnShift:400;
 
     UpdaterService
     {
         x:marginLeft;
-        y:marginTop;
+        y:marginTop * 6;
     }
 
     ProcessService
     {
-        x:marginLeft * 7;
+        x:marginLeft;
         y:marginTop;
     }
 }

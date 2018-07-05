@@ -8,12 +8,7 @@
 #include <QList>
 #include <QJsonObject>
 
-enum class LogType
-{
-    Verbose,
-    Warning,
-    Error
-};
+
 
 struct MainConfig
 {
@@ -79,5 +74,20 @@ public:
     bool autoupdate = false;
 };
 Q_DECLARE_METATYPE(UpdateConfig)
+
+struct SlackConfig
+{
+private:
+    Q_GADGET
+    Q_PROPERTY(QString logChannel MEMBER logChannel)
+    Q_PROPERTY(QString errorChannel MEMBER errorChannel)
+
+public:
+    QString logChannel = "";
+    QString errorChannel = "";
+};
+Q_DECLARE_METATYPE(SlackConfig)
+
+
 
 #endif // TYPES_H

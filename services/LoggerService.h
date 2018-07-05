@@ -5,19 +5,27 @@
 #include <QObject>
 #include <QQmlContext>
 #include "BaseService.h"
-//#include "components/SlackComponent.h"
+#include "components/SlackComponent.h"
 #include "config/Config.h"
 
+enum class LogType
+{
+    Verbose,
+    Warning,
+    Error
+};
+
+enum class LogRemoteType
+{
+    None,
+    Server,
+    Slack,
+};
 
 class LoggerService : public BaseService
 {
     Q_OBJECT
 public:
-    enum class RemoteType
-    {
-        Server,
-        Slack,
-    };
 
     LoggerService(QObject *parent = nullptr);
 
@@ -27,11 +35,11 @@ public:
     virtual void stop() override;
     virtual QString getName() const override;
 
-    void log(const QString& message, LogType type, RemoteType remoteType, bool saveLocal = true);
-   // void setSlackComponent(SlackComponent* component);
+    void log(const QString& message, LogType type, LogRemoteType remoteType, bool saveLocal = true);
+
 
 private:
-    //SlackComponent* slackComponent;
+    QSharedPointer<SlackComponent> slackComponent;
     int standId;
 };
 

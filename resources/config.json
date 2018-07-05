@@ -12,7 +12,7 @@
         "millsCheck": 10000,
         "autocheck": true,
         "autoupdate": true,
-        "patternCheck":"",
+        "patternCheck":"build",
         "releaseDirectory":"release",
         "tempDirectory":"release_temp",
         "oldDirectory":"release_old",
@@ -23,5 +23,10 @@
         "path" : "release\\MindwaveGameClient.exe",
         "autorun" : false,
         "startDelayMills" : 2000
+    },
+    "slack":
+    {
+        "logChannel": "https://hooks.slack.com/services/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",
+        "errorChannel": "https://hooks.slack.com/services/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"
     }
 }

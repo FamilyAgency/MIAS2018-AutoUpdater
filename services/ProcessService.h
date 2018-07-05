@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QProcess>
 #include "BaseService.h"
+#include "services/LoggerService.h"
 
 class ProcessService : public BaseService
 {
@@ -44,6 +45,7 @@ private:
     QProcess *process;   
     QString program;
     ProcessState _processState = ProcessState::Stopped;
+    QSharedPointer<LoggerService> loggerService;
 
 signals:
     void processStateChanged();

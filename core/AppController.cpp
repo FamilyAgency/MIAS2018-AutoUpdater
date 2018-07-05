@@ -39,7 +39,7 @@ void AppController::onConfigLoaded(ConfigPtr value)
 }
 
 void AppController::onPendingUpdate()
-{
+{    
     if(processService->processState() != ProcessService::ProcessState::Stopped)
     {
         processService->stopApp();
@@ -52,7 +52,6 @@ void AppController::onPendingUpdate()
 
 void AppController::onUpdateComplete(bool runApp, int newBuildVersion)
 {
-    qDebug()<<"newBuildVersion "<<newBuildVersion;
     config->mainConfig->version = newBuildVersion;
     updateAllConfigs();
     emit pendingSaveConfig();

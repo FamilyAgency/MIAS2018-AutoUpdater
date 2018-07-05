@@ -9,6 +9,7 @@
 #include "config/Config.h"
 #include "services/ProcessService.h"
 #include "services/UpdaterService.h"
+#include "services/LoggerService.h"
 #include "Types.h"
 
 class AppController : public QObject
@@ -34,7 +35,7 @@ public:
 private:
     QSharedPointer<StandData> standData;
     QSharedPointer<ProcessService> processService;
-    QSharedPointer<UpdaterService> updaterService;
+    QSharedPointer<UpdaterService> updaterService;   
     ConfigPtr config;
 
     void updateAllConfigs();

@@ -5,6 +5,8 @@ UpdaterService::UpdaterService(QObject *parent) : BaseService(parent)
 {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+
+    loggerService.reset(new LoggerService());
 }
 
 UpdaterService::~UpdaterService()
@@ -26,6 +28,7 @@ void UpdaterService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
     setUpdateConfig(*value->updateConfig);
+    loggerService->setConfig(value);
 }
 
 void UpdaterService::setUpdateConfig(const UpdateConfig& value)
@@ -108,7 +111,7 @@ bool UpdaterService::hasUpdate(QDir& newBuildDir)
 
     foreach(QFileInfo finfo, list)
     {
-        QString pattern = "build";
+        QString pattern = _updateConfig.patternCheck;
         QString fileName = finfo.fileName();
         int index = fileName.indexOf(pattern);
         if(index != -1)
@@ -122,6 +125,16 @@ bool UpdaterService::hasUpdate(QDir& newBuildDir)
                 foundNewVersion = true;
             }
         }
+    }
+
+    if(foundNewVersion)
+    {
+        newBuildVersion = lastVersionNum;
+        loggerService->log("Software version " + QString::number(newBuildVersion)+ " detected", LogType::Verbose, LogRemoteType::Slack, true);
+    }
+    else
+    {
+        loggerService->log("No updates detected", LogType::Verbose, LogRemoteType::Slack, true);
     }
 
     setNeedUpdate(foundNewVersion);
@@ -203,6 +216,8 @@ void UpdaterService::forceStartUpdate()
 
 void UpdaterService::startUpdate()
 {
+    loggerService->log("Start update", LogType::Verbose, LogRemoteType::Slack, true);
+
     QDir processDir = config->mainConfig->workingDirectory;
     QString releaseCurrent = _updateConfig.releaseDirectory;
     QString releaseTemp = _updateConfig.tempDirectory;
@@ -226,6 +241,8 @@ void UpdaterService::startUpdate()
         }
     }
     setNeedUpdate(false);
+    loggerService->log("Update complete, software version " + QString::number(newBuildVersion), LogType::Verbose, LogRemoteType::Slack, true);
+
     emit updateComplete(_updateConfig.runAppAfterUpdate, newBuildVersion);
     start();
 }
@@ -235,6 +252,7 @@ void UpdaterService::autoCheckChanged(bool value)
     //TODO
     _updateConfig.autocheck = value;
     config->updateConfig->autocheck = value;
+    //
 
     if(value)
     {
