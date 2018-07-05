@@ -10,9 +10,9 @@ ApplicationWindow
     height: 600;
     title: qsTr("Auto updater");
 
-    property int marginLeft:50;
-    property int marginTop:50;
-    property int columnShift:400;
+    property int marginLeft: 50;
+    property int marginTop: 50;
+    property int columnShift: 400;
 
     UpdaterService
     {
