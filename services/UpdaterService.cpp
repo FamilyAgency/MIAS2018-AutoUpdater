@@ -25,7 +25,7 @@ void UpdaterService::setQmlContext(QQmlContext* qmlContext)
 void UpdaterService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
-    setUpdateConfig(value->updateData);
+    setUpdateConfig(*value->updateConfig);
 }
 
 void UpdaterService::setUpdateConfig(const UpdateConfig& value)
@@ -34,12 +34,22 @@ void UpdaterService::setUpdateConfig(const UpdateConfig& value)
     emit updateConfigChanged();
 }
 
+void UpdaterService::resetTimer()
+{
+     timer->stop();
+     if(_updateConfig.autocheck)
+     {
+         startTime = QDateTime::currentMSecsSinceEpoch();
+         timer->start(taskTimerMills);
+     }
+}
+
 void UpdaterService::start()
 {
     if(_updateConfig.autocheck)
-    {
+    {       
         startTime = QDateTime::currentMSecsSinceEpoch();
-        timer->start(taskTimerMills) ;
+        timer->start(taskTimerMills);
     }
 }
 
@@ -52,9 +62,16 @@ void UpdaterService::onUpdate()
         setTimeToUpdate(diff / 1000 + 1);
     }
     else
-    {
-        timer->stop();
-        checkUpdate();       
+    {       
+        bool updateCome = checkUpdate();
+        if(updateCome && _updateConfig.autoupdate)
+        {
+            emit pendingUpdate();
+        }
+        else
+        {
+            resetTimer();
+        }
     }
 }
 
@@ -68,21 +85,22 @@ void UpdaterService::stop()
 
 }
 
-void UpdaterService::checkUpdate()
-{ 
-    newBuildDir.setPath("");
-    bool updateCome = hasUpdate(newBuildDir);
-    qDebug()<<"updateCome "<<updateCome;
+void UpdaterService::forceCheckUpdate()
+{
+    timer->stop();
+    checkUpdate();
+    resetTimer();
+}
 
-    if(updateCome)
-    {
-        emit pendingUpdate();
-    }
+bool UpdaterService::checkUpdate()
+{
+    newBuildDir.setPath("");
+    return hasUpdate(newBuildDir);
 }
 
 bool UpdaterService::hasUpdate(QDir& newBuildDir)
 {
-    int lastVersionNum = config->configData.version;
+    int lastVersionNum = newBuildVersion = config->mainConfig->version;
     bool foundNewVersion = false;
 
     QDir dir(_updateConfig.checkDirectory);
@@ -96,10 +114,10 @@ bool UpdaterService::hasUpdate(QDir& newBuildDir)
         if(index != -1)
         {
             QString versionNewString = fileName.right(fileName.length() - index - pattern.length());
-            int versionNew  = versionNewString.toInt();
-            if(versionNew > lastVersionNum)
+            newBuildVersion  = versionNewString.toInt();
+            if(newBuildVersion > lastVersionNum)
             {
-                lastVersionNum = versionNew;
+                lastVersionNum = newBuildVersion;
                 newBuildDir = finfo.absoluteFilePath();
                 foundNewVersion = true;
             }
@@ -177,13 +195,19 @@ void UpdaterService::onUpdateLoaded()
     emit pendingUpdate();
 }
 
+void UpdaterService::forceStartUpdate()
+{
+    timer->stop();
+    emit pendingUpdate();
+}
+
 void UpdaterService::startUpdate()
 {
-    QDir processDir = "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process";
-    QString releaseCurrent = "release";
-    QString releaseTemp = "release_temp";
-    QString releaseOld = "release_old";
-    QString separator = "\\";
+    QDir processDir = config->mainConfig->workingDirectory;// "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process";
+    QString releaseCurrent = _updateConfig.releaseDirectory;// "release";
+    QString releaseTemp = _updateConfig.tempDirectory;//"release_temp";
+    QString releaseOld = _updateConfig.oldDirectory;//"release_old";
+    QString separator = config->mainConfig->folderSeparator;//"\\";
     if(!newBuildDir.path().isEmpty())
     {
         QDir destDir = processDir.absolutePath() + separator + releaseTemp;
@@ -201,8 +225,23 @@ void UpdaterService::startUpdate()
         }
     }
     setNeedUpdate(false);
-    emit updateComplete();
+    emit updateComplete(_updateConfig.runAppAfterUpdate, newBuildVersion);
     start();
+}
+
+void UpdaterService::autoCheckChanged(bool value)
+{
+    _updateConfig.autocheck = value;
+    config->updateConfig->autocheck = value;
+
+    if(value)
+    {
+        resetTimer();
+    }
+    else
+    {
+        timer->stop();
+    }
 }
 
 QString UpdaterService::getName() const

@@ -8,7 +8,7 @@ LoggerService::LoggerService(QObject *parent) : BaseService(parent)
 
 void LoggerService::setConfig(ConfigPtr config)
 {
-    standId = config->configData.standId;
+    standId = config->mainConfig->standId;
 }
 
 void LoggerService::setQmlContext(QQmlContext* qmlContext)

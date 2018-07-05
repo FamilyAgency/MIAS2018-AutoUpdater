@@ -13,14 +13,18 @@ void StandData::setQmlContext(QQmlContext* value)
     qmlContext->setContextProperty("standData", this);
 }
 
-void StandData::setConfig(const MainConfig& config)
+void StandData::setConfig(ConfigPtr value)
 {
-    //TODO
-    _mainConfig = config;
-    emit configChanged();
+    setMainConfig(*value->mainConfig.data());
 }
 
-MainConfig StandData::config() const
+void StandData::setMainConfig(MainConfig config)
+{
+    _mainConfig = config;
+    emit mainConfigChanged();
+}
+
+MainConfig StandData::mainConfig() const
 {
     return _mainConfig;
 }

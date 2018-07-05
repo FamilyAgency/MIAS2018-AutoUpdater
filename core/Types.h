@@ -26,7 +26,7 @@ private:
     Q_PROPERTY(QString workingDirectory MEMBER workingDirectory)
     Q_PROPERTY(QString folderSeparator MEMBER folderSeparator)
 
- public:
+ public:    
     int version;
     QString configUpdateUrl;
     bool needRemoteUpdate;
@@ -42,10 +42,12 @@ private:
     Q_GADGET
     Q_PROPERTY(QString path MEMBER path)
     Q_PROPERTY(bool autorun MEMBER autorun)
+    Q_PROPERTY(int startDelayMills MEMBER startDelayMills)
 
 public:
     QString path = "";
     bool autorun = false;
+    int startDelayMills = 1000;
 };
 Q_DECLARE_METATYPE(ProcessConfig)
 
@@ -62,7 +64,7 @@ private:
     Q_PROPERTY(QString tempDirectory MEMBER tempDirectory)
     Q_PROPERTY(QString oldDirectory MEMBER oldDirectory)
     Q_PROPERTY(bool runAppAfterUpdate MEMBER runAppAfterUpdate)
-
+    Q_PROPERTY(bool autoupdate MEMBER autoupdate)
 
 public:
     QString checkDirectory = "";
@@ -74,6 +76,7 @@ public:
     QString tempDirectory = "";
     QString oldDirectory = "";
     bool runAppAfterUpdate = false;
+    bool autoupdate = false;
 };
 Q_DECLARE_METATYPE(UpdateConfig)
 

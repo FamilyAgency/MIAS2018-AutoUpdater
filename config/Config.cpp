@@ -2,7 +2,9 @@
 
 Config::Config()
 {
-
+    mainConfig.reset(new MainConfig);
+    processConfig.reset(new ProcessConfig);
+    updateConfig.reset(new UpdateConfig);
 }
 
 QString Config::getRawData() const

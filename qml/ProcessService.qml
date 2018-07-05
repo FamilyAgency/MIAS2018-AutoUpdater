@@ -22,7 +22,7 @@ Item
             Text
             {
                 id:processPath;
-                text: "Process path: " + standData.config.workingDirectory + standData.config.folderSeparator + processService.processConfig.path;
+                text: "Process path: " + standData.mainConfig.workingDirectory + standData.mainConfig.folderSeparator + processService.processConfig.path;
                 font.family: "Helvetica";
                 font.pixelSize: 15;
                 color: "#999999";

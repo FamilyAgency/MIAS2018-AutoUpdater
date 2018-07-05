@@ -28,8 +28,9 @@ public:
     };
     Q_ENUMS(UpdateState)
 
-    Q_INVOKABLE void checkUpdate();
-    Q_INVOKABLE void startUpdate();
+    Q_INVOKABLE void autoCheckChanged(bool value);
+    Q_INVOKABLE void forceCheckUpdate();
+    Q_INVOKABLE void forceStartUpdate();
 
     virtual void start() override;
     virtual void stop() override;
@@ -47,6 +48,7 @@ public:
 
     bool needUpdate() const;
     void setNeedUpdate(bool value);
+    void startUpdate();
 
 private:
     UpdateConfig _updateConfig;
@@ -56,12 +58,16 @@ private:
     int _timeToUpdate = 0;
     bool _needUpdate = false;
     QDir newBuildDir = "";
+    int newBuildVersion = 0;
+
 
    bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
+   void resetTimer();
+   bool checkUpdate();
 
 signals:
     void pendingUpdate();
-    void updateComplete();
+    void updateComplete(bool runApp, int newBuildVersion);
     void updateError();
     void updateLoadingError();
     void timeToUpdateChanged();

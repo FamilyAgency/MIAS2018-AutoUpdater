@@ -9,7 +9,7 @@ AppController::AppController(QObject *parent) : QObject(parent)
 
     updaterService.reset(new UpdaterService());
     connect(updaterService.data(), SIGNAL(pendingUpdate()), this, SLOT(onPendingUpdate()));
-    connect(updaterService.data(), SIGNAL(updateComplete()), this, SLOT(onUpdateComplete()));
+    connect(updaterService.data(), SIGNAL(updateComplete(bool, int)), this, SLOT(onUpdateComplete(bool, int)));
     connect(updaterService.data(), SIGNAL(updateError()), this, SLOT(onUpdateError()));
     connect(updaterService.data(), SIGNAL(updateLoadingError()), this, SLOT(onUpdateLoadingError()));
 }
@@ -18,7 +18,7 @@ AppController::~AppController()
 {
     disconnect(processService.data(), SIGNAL(processStopped(int)), this, SLOT(onProcessStopped(int)));
     disconnect(updaterService.data(), SIGNAL(pendingUpdate()), this, SLOT(onPendingUpdate()));
-    disconnect(updaterService.data(), SIGNAL(updateComplete()), this, SLOT(onUpdateComplete()));
+    disconnect(updaterService.data(), SIGNAL(updateComplete(bool, int)), this, SLOT(onUpdateComplete(bool, int)));
     disconnect(updaterService.data(), SIGNAL(updateError()), this, SLOT(onUpdateError()));
     disconnect(updaterService.data(), SIGNAL(updateLoadingError()), this, SLOT(onUpdateLoadingError()));
 }
@@ -30,11 +30,10 @@ void AppController::setQmlContext(QQmlContext* qmlContext)
     updaterService->setQmlContext(qmlContext);
 }
 
-void AppController::onConfigLoaded(ConfigPtr config)
+void AppController::onConfigLoaded(ConfigPtr value)
 {
-    standData->setConfig(config->configData);
-    updaterService->setConfig(config);
-    processService->setConfig(config);
+    config = value;
+    updateAllConfigs();
     updaterService->start();
     processService->start();
 }
@@ -51,9 +50,17 @@ void AppController::onPendingUpdate()
     }
 }
 
-void AppController::onUpdateComplete()
+void AppController::onUpdateComplete(bool runApp, int newBuildVersion)
 {
-   processService->startApp();
+    qDebug()<<"newBuildVersion "<<newBuildVersion;
+    config->mainConfig->version = newBuildVersion;
+    updateAllConfigs();
+    emit pendingSaveConfig();
+
+    if(runApp)
+    {
+         processService->startApp();
+    }
 }
 
 void AppController::onProcessStopped(int value)
@@ -82,4 +89,11 @@ void AppController::onConfigError()
 void AppController::start()
 {
 
+}
+
+void AppController::updateAllConfigs()
+{
+    updaterService->setConfig(config);
+    standData->setConfig(config);
+    processService->setConfig(config);
 }

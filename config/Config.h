@@ -16,9 +16,9 @@ public:
     Config();
     bool valid = true;
 
-    MainConfig configData;
-    ProcessConfig processData;
-    UpdateConfig updateData;
+    QSharedPointer<MainConfig> mainConfig;
+    QSharedPointer<ProcessConfig> processConfig;
+    QSharedPointer<UpdateConfig> updateConfig;
 
     QString getRawData() const;
     void setRawData(const QString& value);

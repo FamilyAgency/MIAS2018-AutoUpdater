@@ -20,6 +20,7 @@ public:
 
     void load();
 
+
     QSharedPointer<ConfigLoader> configLoader;
     QSharedPointer<ConfigParser> configParser;
     QSharedPointer<ConfigWriter> configWriter;
@@ -32,17 +33,17 @@ private:
     ConfigLoader::CONFIG_LOAD_METHOD currentConfigLoadingMethod, defaultConfigLoadingMethod;
     QString currentConfigPath;
     bool saveRemote;
-    ConfigPtr configData;
+    ConfigPtr config;
 
 private slots:
      void onConfigParsingComplete(ConfigPtr configParsed);
      void onConfigLoadingError();
 
 public slots:
-     void onUpdateConfigOfStartingApp(int id);
+     void save();
 
 signals:
-     void configServiceReady(ConfigPtr configData);
+     void configServiceReady(ConfigPtr config);
      void configServiceError();
 };
 

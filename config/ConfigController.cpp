@@ -59,18 +59,18 @@ void ConfigController::load()
 
 void ConfigController::onConfigParsingComplete(ConfigPtr configParsed)
 {
-    configData = configParsed;
+    config= configParsed;
 
     switch(currentConfigLoadingMethod)
     {
     case ConfigLoader::CONFIG_LOAD_METHOD::RESOURCE_FILE:
     case ConfigLoader::CONFIG_LOAD_METHOD::LOCAL_FILE:
-        qDebug() << "ConfigLoader::CONFIG_LOAD_METHOD::LOCAL_FILE: "<<configData->configData.needRemoteUpdate;
-        if(configData->configData.needRemoteUpdate)
+        qDebug() << "ConfigLoader::CONFIG_LOAD_METHOD::LOCAL_FILE: "<<config->mainConfig->needRemoteUpdate;
+        if(config->mainConfig->needRemoteUpdate)
         {
             qDebug() << "will load from remote";
             currentConfigLoadingMethod =  ConfigLoader::CONFIG_LOAD_METHOD::URL;
-            currentConfigPath = configData->configData.configUpdateUrl;
+            currentConfigPath = config->mainConfig->configUpdateUrl;
             load();
         }
         else
@@ -80,11 +80,11 @@ void ConfigController::onConfigParsingComplete(ConfigPtr configParsed)
         break;
 
     case ConfigLoader::CONFIG_LOAD_METHOD::URL:
-        if(saveRemote && configData->valid && defaultConfigLoadingMethod!= ConfigLoader::CONFIG_LOAD_METHOD::RESOURCE_FILE)
+        if(saveRemote && config->valid && defaultConfigLoadingMethod!= ConfigLoader::CONFIG_LOAD_METHOD::RESOURCE_FILE)
         {
-            configWriter->save(configData, getConfigPath(ConfigLoader::CONFIG_LOAD_METHOD::LOCAL_FILE));
+            configWriter->save(config);
         }        
-        serviceFinished(configData->valid);
+        serviceFinished(config->valid);
         break;
     }
 }
@@ -100,7 +100,7 @@ void ConfigController::onConfigLoadingError()
 
     case ConfigLoader::CONFIG_LOAD_METHOD::URL:
         qDebug() << "load from url error";
-        if(configData->valid)
+        if(config->valid)
         {
             qDebug() << "but config loaded from disk.. can run";
             serviceFinished(true);
@@ -118,7 +118,7 @@ void ConfigController::serviceFinished(bool success)
 {
     if(success)
     {
-        emit configServiceReady(configData);
+        emit configServiceReady(config);
     }
     else
     {
@@ -126,8 +126,8 @@ void ConfigController::serviceFinished(bool success)
     }
 }
 
-void ConfigController::onUpdateConfigOfStartingApp(int id)
+void ConfigController::save()
 {
-    configWriter->saveProcessConfigData(configData, id);
+    configWriter->save(config);
 }
 

@@ -34,13 +34,13 @@ void ProcessService::setQmlContext(QQmlContext* qmlContext)
 void ProcessService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
-    setProcesConfig(value->processData);
+    setProcesConfig(*value->processConfig);
 }
 
 QString ProcessService::getProcessFullPath() const
 {
-    return config->configData.workingDirectory +
-           config->configData.folderSeparator +
+    return config->mainConfig->workingDirectory +
+           config->mainConfig->folderSeparator +
            _processConfig.path;
 }
 
@@ -73,7 +73,7 @@ void ProcessService::startApp()
     if(_processState == ProcessState::Stopped)
     {
        setProcessState(ProcessState::PendingStart);
-       QTimer::singleShot(2000, this, SLOT(startUpWithDelay()));
+       QTimer::singleShot(_processConfig.startDelayMills, this, SLOT(startUpWithDelay()));
     }
 }
 
@@ -120,10 +120,6 @@ void ProcessService::onReadyReadStandardError()
 {
     qDebug()<<"ready Read Standard Error";
 }
-
-
-
-
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)
 {

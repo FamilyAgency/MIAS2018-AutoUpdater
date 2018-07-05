@@ -23,9 +23,9 @@ public slots:
 private:
     ConfigPtr config;
 
-    MainConfig parseConfigData(const QJsonObject& jsonObj);
-    ProcessConfig parseProcessData(const QJsonObject& jsonObj);
-    UpdateConfig parseUpdateData(const QJsonObject& jsonObj);
+    void parseConfigData(QSharedPointer<MainConfig> mainConfig, const QJsonObject& jsonObj);
+    void parseProcessData(QSharedPointer<ProcessConfig> processConfig, const QJsonObject& jsonObj);
+    void parseUpdateData(QSharedPointer<UpdateConfig> updateConfig, const QJsonObject& jsonObj);
 };
 
 #endif // CONFIGPARSER_H

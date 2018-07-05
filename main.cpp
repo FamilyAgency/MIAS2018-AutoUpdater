@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appController", appController.data());
     appController.data()->setQmlContext(engine.rootContext());
 
+    QObject::connect(appController.data(), SIGNAL(pendingSaveConfig()), configController.data(), SLOT(save()));
     QObject::connect(configController.data(), SIGNAL(configServiceReady(ConfigPtr)), appController.data(), SLOT(onConfigLoaded(ConfigPtr)));
     QObject::connect(configController.data(), SIGNAL(configServiceError()), appController.data(), SLOT(onConfigError()));
 

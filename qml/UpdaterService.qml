@@ -29,7 +29,7 @@ Item {
 
             Text
             {
-                text: "Config version: " + standData.config.version;
+                text: "Config version: " + standData.mainConfig.version;
                 font.family: "Helvetica";
                 font.pixelSize: 15;
                 color: "#999999";
@@ -56,6 +56,10 @@ Item {
                 implicitWidth: 200;
                 text: "Auto check";
                 checked: updaterService.updateConfig.autocheck;
+                onCheckStateChanged:
+                {
+                    updaterService.autoCheckChanged(checked);
+                }
             }
 
             Button
@@ -64,13 +68,13 @@ Item {
                 text:"Check now";
                 onClicked:
                 {
-                   updaterService.checkUpdate();
+                   updaterService.forceCheckUpdate();
                 }
             }
 
             Text
             {
-                text: "Need update: " + updaterService.needUpdate;
+                text: "Has new version: " + updaterService.needUpdate;
                 color: updaterService.needUpdate ? "#009900" : "#990000";
                 font.family: "Helvetica";
                 font.pixelSize: 15;
@@ -84,7 +88,7 @@ Item {
 
                 onClicked:
                 {
-                    updaterService.startUpdate();
+                    updaterService.forceStartUpdate();
                 }
             }
 

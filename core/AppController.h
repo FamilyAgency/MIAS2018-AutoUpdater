@@ -35,6 +35,9 @@ private:
     QSharedPointer<StandData> standData;
     QSharedPointer<ProcessService> processService;
     QSharedPointer<UpdaterService> updaterService;
+    ConfigPtr config;
+
+    void updateAllConfigs();
 
 public slots:
     void onConfigLoaded(ConfigPtr config);
@@ -42,10 +45,13 @@ public slots:
 
 private slots:
     void onPendingUpdate();
-    void onUpdateComplete();
+    void onUpdateComplete(bool runApp, int newBuildVersion);
     void onUpdateError();
     void onUpdateLoadingError();
     void onProcessStopped(int value);
+
+signals:
+    void pendingSaveConfig();
 };
 
 #endif // APPCOPCONTROLLER_H

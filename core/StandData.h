@@ -8,21 +8,22 @@
 class StandData : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(MainConfig config READ config WRITE setConfig NOTIFY configChanged)
+    Q_PROPERTY(MainConfig mainConfig READ mainConfig WRITE setMainConfig NOTIFY mainConfigChanged)
 
 public:
     explicit StandData(QObject *parent = nullptr);
     void setQmlContext(QQmlContext* value);
+    void setConfig(ConfigPtr value);
 
-    void setConfig(const MainConfig& config);
-    MainConfig config() const;
+    void setMainConfig(MainConfig config);
+    MainConfig mainConfig() const;
 
 private:   
     QQmlContext* qmlContext;
     MainConfig _mainConfig;
 
 signals:
-    void configChanged();
+    void mainConfigChanged();
 
 };
 
