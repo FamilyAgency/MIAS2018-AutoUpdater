@@ -56,6 +56,7 @@ Item
         Button
         {
             implicitWidth: 200;
+            implicitHeight: 50;
             text:"Check now";
             onClicked:
             {
@@ -74,6 +75,7 @@ Item
         Button
         {
             implicitWidth: 200;
+            implicitHeight: 50;
             text: "Start Update";
             enabled: updaterService.needUpdate;
 

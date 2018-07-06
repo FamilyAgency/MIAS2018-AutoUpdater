@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     components/SlackComponent.cpp \
     components/BaseComponent.cpp \
     components/MonitoringComponent.cpp \
-    components/monitoring/MemoryChecker.cpp
+    components/monitoring/MemoryChecker.cpp \
+    services/UpdaterServiceFolder.cpp
 
 RESOURCES += qml.qrc
 
@@ -64,4 +65,5 @@ HEADERS += \
     components/SlackComponent.h \
     components/BaseComponent.h \
     components/MonitoringComponent.h \
-    components/monitoring/MemoryChecker.h
+    components/monitoring/MemoryChecker.h \
+    services/UpdaterServiceFolder.h

@@ -1,4 +1,5 @@
 #include "AppController.h"
+#include "services/UpdaterServiceFolder.h"
 
 AppController::AppController(QObject *parent) : QObject(parent)
 { 
@@ -8,7 +9,7 @@ AppController::AppController(QObject *parent) : QObject(parent)
     services.push_back(processService);
     connect(processService.data(), SIGNAL(processStopped(int)), this, SLOT(onProcessStopped(int)));
 
-    updaterService.reset(new UpdaterService());
+    updaterService.reset(new UpdaterServiceFolder());
     services.push_back(updaterService);
     connect(updaterService.data(), SIGNAL(pendingUpdate()), this, SLOT(onPendingUpdate()));
     connect(updaterService.data(), SIGNAL(updateComplete(bool, int)), this, SLOT(onUpdateComplete(bool, int)));

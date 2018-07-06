@@ -49,23 +49,29 @@ public:
 
     bool needUpdate() const;
     void setNeedUpdate(bool value);
-    void startUpdate();
+    virtual void startUpdate() = 0;
 
-private:
-    UpdateConfig _updateConfig;
-    int startTime = 0;
-    const int taskTimerMills = 10;
+protected:
     QTimer* timer;
-    int _timeToUpdate = 0;
-    bool _needUpdate = false;
     QDir newBuildDir = "";
     int newBuildVersion = 0;
-
+    UpdateConfig _updateConfig;
     QSharedPointer<LoggerService> loggerService;
+
+    virtual void checkUpdate() = 0;
+    virtual bool hasUpdate() = 0;
+
+private:
+    int startTime = 0;
+    const int taskTimerMills = 10;    
+    int _timeToUpdate = 0;
+    bool _needUpdate = false;
+
+
 
    bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
    void resetTimer();
-   void checkUpdate();
+
 
 signals:
     void pendingUpdate();
