@@ -9,6 +9,7 @@
 class ProcessService : public BaseService
 {
     Q_OBJECT
+
     Q_PROPERTY(ProcessState processState READ processState WRITE setProcessState NOTIFY processStateChanged)
     Q_PROPERTY(ProcessConfig processConfig READ processConfig WRITE setProcesConfig NOTIFY processConfigChanged)
 

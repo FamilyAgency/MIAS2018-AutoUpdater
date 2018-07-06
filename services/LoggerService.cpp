@@ -31,30 +31,32 @@ void LoggerService::log(const QString& message, LogType type, LogRemoteType remo
 {
     qDebug()<<message;
 
-    switch(remoteType)
-    {
-    case LogRemoteType::Slack:
-        slackComponent->sendMessage(createSlackMessage(message), config->slackConfig->logChannel);
-        break;
-
-    case LogRemoteType::Server:
-        break;
-    }
-
     QString color;
-    switch(remoteType)
-    {
+    QString slackChannel = config->slackConfig->logChannel;
 
+    switch(type)
+    {
     case LogType::Verbose:
         color = "black";
         break;
 
     case LogType::Error:
         color = "red";
+        slackChannel = config->slackConfig->errorChannel;
         break;
 
     case LogType::Warning:
         color = "yellow";
+        break;
+    }
+
+    switch(remoteType)
+    {
+    case LogRemoteType::Slack:
+        slackComponent->sendMessage(createSlackMessage(message), slackChannel);
+        break;
+
+    case LogRemoteType::Server:
         break;
     }
 
@@ -119,8 +121,6 @@ void LoggerService::start()
     {
         QDir().mkdir(getLocalLogDirPath());
     }
-
-    logTofile("SSL version: " + QSslSocket::sslLibraryBuildVersionString());
 }
 
 void LoggerService::stop()
@@ -132,5 +132,3 @@ QString LoggerService::getName() const
 {
     return "Logger";
 }
-
-

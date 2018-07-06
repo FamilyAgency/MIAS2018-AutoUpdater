@@ -129,10 +129,10 @@ QString ProcessService::getName() const
 
 void ProcessService::onReadyReadStandardError()
 {
-    qDebug()<<"ready Read Standard Error";
+    loggerService->log("Process ready Read Standard Error !!!!", LogType::Error, LogRemoteType::Slack, true);
 }
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)
-{
-    qDebug()<<"error Occurred "<<error;
+{   
+    loggerService->log("Process Error !!!!", LogType::Error, LogRemoteType::Slack, true);
 }

@@ -1,5 +1,5 @@
 {
-    "configUpdateUrl": "http://familyagency.ru/lab/synapse/digitalframes/config.json",
+    "configUpdateUrl": "http://familyagency.ru/lab/mias2018/config.json",
     "folderSeparator": "\\",
     "monitoring": {
         "enabled": true,
