@@ -7,6 +7,7 @@ Config::Config()
     updateConfig.reset(new UpdateConfig);
     slackConfig.reset(new SlackConfig);
     monitoringConfig.reset(new MonitoringConfig);
+    loggerConfig.reset(new LoggerConfig);
 }
 
 Config::~Config()

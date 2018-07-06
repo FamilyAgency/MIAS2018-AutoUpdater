@@ -39,6 +39,8 @@ void UpdaterService::setUpdateConfig(const UpdateConfig& value)
 
 void UpdaterService::start()
 {
+    loggerService->start();
+
     if(_updateConfig.autocheck)
     {
         startTime = QDateTime::currentMSecsSinceEpoch();

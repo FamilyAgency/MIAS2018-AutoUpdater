@@ -103,6 +103,21 @@ public:
 };
 Q_DECLARE_METATYPE(MonitoringConfig)
 
+struct LoggerConfig
+{
+private:
+    Q_GADGET
+    Q_PROPERTY(QString localPath MEMBER localPath)
+    Q_PROPERTY(bool localEnabled MEMBER localEnabled)
+
+public:
+    QString localPath = "logs";
+    bool localEnabled = false;
+};
+Q_DECLARE_METATYPE(LoggerConfig)
+
+
+
 
 
 #endif // TYPES_H

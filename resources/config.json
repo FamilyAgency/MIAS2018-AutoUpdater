@@ -11,6 +11,14 @@
         "path": "release\\MindwaveGameClient.exe",
         "startDelayMills": 2000
     },
+    "logger":
+    {
+        "local":
+        {
+            "enabled":true,
+            "path": "logs"
+        }
+    },
     "slack": {
         "enabled": true,
         "errorChannel": "https://hooks.slack.com/services/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",

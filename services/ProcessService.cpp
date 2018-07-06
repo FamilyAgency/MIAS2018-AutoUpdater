@@ -60,6 +60,7 @@ ProcessConfig ProcessService::processConfig() const
 
 void ProcessService::start()
 {
+    loggerService->start();
     if(_processConfig.autorun)
     {
         startApp();

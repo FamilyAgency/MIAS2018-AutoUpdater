@@ -22,6 +22,7 @@ public:
     QSharedPointer<UpdateConfig> updateConfig;
     QSharedPointer<SlackConfig> slackConfig;
     QSharedPointer<MonitoringConfig> monitoringConfig;
+    QSharedPointer<LoggerConfig> loggerConfig;
 
     QString getRawData() const;
     void setRawData(const QString& value);
