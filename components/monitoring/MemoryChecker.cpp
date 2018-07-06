@@ -9,7 +9,7 @@ MemoryChecker::MemoryChecker()
 
 double MemoryChecker::memoryUsed()
 {
-    int toMbBytes = 1048576;
+    const int toMbBytes = 1048576;
 
     PROCESS_MEMORY_COUNTERS pmc;
     GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));

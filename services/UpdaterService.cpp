@@ -5,9 +5,7 @@ UpdaterService::UpdaterService(QObject *parent) : BaseService(parent)
 {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
-
     connect(this, SIGNAL(updateCheckingComplete(bool)), this, SLOT(onUpdateCheckingComplete(bool)));
-
     loggerService.reset(new LoggerService());
 }
 
@@ -121,7 +119,6 @@ void UpdaterService::autoCheckChanged(bool value)
     //TODO
     _updateConfig.autocheck = value;
     config->updateConfig->autocheck = value;
-    //
 
     if(value)
     {

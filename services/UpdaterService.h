@@ -67,11 +67,8 @@ private:
     int _timeToUpdate = 0;
     bool _needUpdate = false;
 
-
-
    bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
    void resetTimer();
-
 
 signals:
     void pendingUpdate();

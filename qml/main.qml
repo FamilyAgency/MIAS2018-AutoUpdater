@@ -7,7 +7,7 @@ ApplicationWindow
 {
     visible: true;
     width: 800;
-    height: 600;
+    height: 700;
     title: qsTr("Auto updater");
 
     property int marginLeft: 50;
