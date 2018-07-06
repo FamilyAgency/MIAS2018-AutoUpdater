@@ -22,6 +22,9 @@ private:
 private slots:
    void httpRequestSuccessHandler(QNetworkReply* reply);
    void onRequestFailed();
+
+signals:
+   void slackNotifyResponse(const QString& message);
 };
 
 #endif // SLACKCOMPONENT_H

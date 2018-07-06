@@ -27,7 +27,6 @@ void SlackComponent::setConfig(ConfigPtr value)
 
 void SlackComponent::sendMessage(const QString& msg, const QString& channel)
 {
-    qDebug()<<slackConfig->enabled;
     if(!slackConfig->enabled)
     {
         return;
@@ -49,31 +48,17 @@ void SlackComponent::sendMessage(const QString& msg, const QString& channel)
 
 void SlackComponent::httpRequestSuccessHandler(QNetworkReply* reply)
 {
-    //if(reply->url().host() == SERVER_HOST)
-    {
-        QByteArray ba = reply->readAll();
-        QString s_data = QString::fromUtf8(ba);
-        //QJsonDocument jsonResponse = QJsonDocument::fromJson(ba);
-        //QJsonObject jsonObject = jsonResponse.object();
-        //QString status = jsonObject["status"].toString();
-        qDebug() << "server answered :::  " << s_data;
-        reply->deleteLater();
-        return;
-    }
-
     if (reply->error() != QNetworkReply::NoError )
-    {
-        QByteArray ba = reply->readAll();
-        QString s_data = QString::fromUtf8(ba);
-
-        qDebug() << "Request failed, " << reply->errorString();
-        return;
+    { 
+        QString message = "Server error, "  + reply->errorString();
+        emit slackNotifyResponse(message);
     }
     else
     {
         QByteArray ba = reply->readAll();
         QString s_data = QString::fromUtf8(ba);
-        qDebug()<<"server message :: "<< s_data;
+        QString message = "Server ok: "  + s_data;
+        emit slackNotifyResponse(message);
     }
 
     reply->deleteLater();

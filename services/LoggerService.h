@@ -28,6 +28,7 @@ class LoggerService : public BaseService
 public:
 
     LoggerService(QObject *parent = nullptr);
+    virtual ~LoggerService();
 
     virtual void setConfig(ConfigPtr config) override;
     virtual void setQmlContext(QQmlContext* qmlContext) override;
@@ -46,6 +47,11 @@ private:
     QSharedPointer<SlackComponent> slackComponent;
     int appId = 0;
     QString appName = "None";
+
+    void logTofile(const QString& message);
+
+private slots:
+    void onSlackNotifyResponse(const QString& message);
 };
 
 #endif // LOGGERSERVICE_H
