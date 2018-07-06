@@ -39,9 +39,11 @@ void SlackComponent::sendMessage(const QString& msg, const QString& channel)
     QUrl serviceURL(channel);
     QNetworkRequest request(serviceURL);
    // request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
-
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Content-Length", postDataSize);
+    QSslConfiguration sslConfig;
+    sslConfig.setProtocol(QSsl::AnyProtocol);
+    request.setSslConfiguration(sslConfig);
     httpClient->runPostRequest(request, jsonString);
 }
 
