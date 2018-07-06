@@ -27,7 +27,8 @@ void SlackComponent::setConfig(ConfigPtr value)
 
 void SlackComponent::sendMessage(const QString& msg, const QString& channel)
 {
-    if(slackConfig->enabled)
+    qDebug()<<slackConfig->enabled;
+    if(!slackConfig->enabled)
     {
         return;
     }
@@ -43,7 +44,7 @@ void SlackComponent::sendMessage(const QString& msg, const QString& channel)
 
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Content-Length", postDataSize);
-    QNetworkReply * reply = networkManager->post(request, jsonString);
+    QNetworkReply* reply = networkManager->post(request, jsonString);
 }
 
 void SlackComponent::httpRequestSuccessHandler(QNetworkReply* reply)

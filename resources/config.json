@@ -2,7 +2,7 @@
     "configUpdateUrl": "http://familyagency.ru/lab/synapse/digitalframes/config.json",
     "folderSeparator": "\\",
     "monitoring": {
-        "enable": true,
+        "enabled": true,
         "memoryCheckMills": 10000
     },
     "needRemoteUpdate": false,
@@ -12,7 +12,7 @@
         "startDelayMills": 2000
     },
     "slack": {
-        "enable": true,
+        "enabled": true,
         "errorChannel": "https://hooks.slack.com/services/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",
         "logChannel": "https://hooks.slack.com/services/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"
     },
