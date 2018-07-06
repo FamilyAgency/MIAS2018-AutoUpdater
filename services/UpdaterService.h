@@ -65,7 +65,7 @@ private:
 
    bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
    void resetTimer();
-   bool checkUpdate();
+   void checkUpdate();
 
 signals:
     void pendingUpdate();
@@ -75,9 +75,11 @@ signals:
     void timeToUpdateChanged();
     void updateConfigChanged();
     void needUpdateChanged();
+    void updateCheckingComplete(bool);
 
 private slots:
     void onUpdate();
+    void onUpdateCheckingComplete(bool);
     void onUpdateLoaded();
 };
 

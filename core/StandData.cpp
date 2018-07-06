@@ -15,7 +15,7 @@ void StandData::setQmlContext(QQmlContext* value)
 
 void StandData::setConfig(ConfigPtr value)
 {
-    setMainConfig(*value->mainConfig.data());
+    setMainConfig(*value->mainConfig);
 }
 
 void StandData::setMainConfig(MainConfig config)

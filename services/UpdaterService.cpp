@@ -6,6 +6,8 @@ UpdaterService::UpdaterService(QObject *parent) : BaseService(parent)
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
 
+    connect(this, SIGNAL(updateCheckingComplete(bool)), this, SLOT(onUpdateCheckingComplete(bool)));
+
     loggerService.reset(new LoggerService());
 }
 
@@ -37,6 +39,20 @@ void UpdaterService::setUpdateConfig(const UpdateConfig& value)
     emit updateConfigChanged();
 }
 
+void UpdaterService::start()
+{
+    if(_updateConfig.autocheck)
+    {
+        startTime = QDateTime::currentMSecsSinceEpoch();
+        timer->start(taskTimerMills);
+    }
+}
+
+void UpdaterService::stop()
+{
+    timer->stop();
+}
+
 void UpdaterService::resetTimer()
 {
      timer->stop();
@@ -45,15 +61,6 @@ void UpdaterService::resetTimer()
          startTime = QDateTime::currentMSecsSinceEpoch();
          timer->start(taskTimerMills);
      }
-}
-
-void UpdaterService::start()
-{
-    if(_updateConfig.autocheck)
-    {       
-        startTime = QDateTime::currentMSecsSinceEpoch();
-        timer->start(taskTimerMills);
-    }
 }
 
 void UpdaterService::onUpdate()
@@ -66,39 +73,21 @@ void UpdaterService::onUpdate()
     }
     else
     {       
-        bool updateCome = checkUpdate();
-        if(updateCome && _updateConfig.autoupdate)
-        {
-            emit pendingUpdate();
-        }
-        else
-        {
-            resetTimer();
-        }
+        checkUpdate();
     }
 }
 
-UpdateConfig UpdaterService::updateConfig() const
+void UpdaterService::checkUpdate()
 {
-    return _updateConfig;
-}
-
-void UpdaterService::stop()
-{
-
+    timer->stop();
+    newBuildDir.setPath("");
+    bool status = hasUpdate(newBuildDir);
+    emit updateCheckingComplete(status);
 }
 
 void UpdaterService::forceCheckUpdate()
 {
-    timer->stop();
     checkUpdate();
-    resetTimer();
-}
-
-bool UpdaterService::checkUpdate()
-{
-    newBuildDir.setPath("");
-    return hasUpdate(newBuildDir);
 }
 
 bool UpdaterService::hasUpdate(QDir& newBuildDir)
@@ -139,17 +128,6 @@ bool UpdaterService::hasUpdate(QDir& newBuildDir)
 
     setNeedUpdate(foundNewVersion);
     return foundNewVersion;
-}
-
-bool UpdaterService::needUpdate() const
-{
-    return _needUpdate;
-}
-
-void UpdaterService::setNeedUpdate(bool value)
-{
-    _needUpdate = value;
-    emit needUpdateChanged();
 }
 
 bool UpdaterService::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory)
@@ -201,6 +179,29 @@ bool UpdaterService::copyPath(QString sourceDir, QString destinationDir, bool ov
     }
 
     return false;
+}
+
+void UpdaterService::onUpdateCheckingComplete(bool updateAvailable)
+{
+    if(updateAvailable && _updateConfig.autoupdate)
+    {
+        emit pendingUpdate();
+    }
+    else
+    {
+        resetTimer();
+    }
+}
+
+bool UpdaterService::needUpdate() const
+{
+    return _needUpdate;
+}
+
+void UpdaterService::setNeedUpdate(bool value)
+{
+    _needUpdate = value;
+    emit needUpdateChanged();
 }
 
 void UpdaterService::onUpdateLoaded()
@@ -278,4 +279,9 @@ void UpdaterService::setTimeToUpdate(int value)
 {
     _timeToUpdate = value;
     emit timeToUpdateChanged();
+}
+
+UpdateConfig UpdaterService::updateConfig() const
+{
+    return _updateConfig;
 }

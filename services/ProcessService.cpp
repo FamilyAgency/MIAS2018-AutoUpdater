@@ -116,6 +116,11 @@ void ProcessService::setProcessState(ProcessState value)
     emit processStateChanged();
 }
 
+bool ProcessService::isStopped() const
+{
+    return _processState == ProcessState::Stopped;
+}
+
 QString ProcessService::getName() const
 {
     return "ProcessService";
