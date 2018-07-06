@@ -38,6 +38,7 @@ void SlackComponent::sendMessage(const QString& msg, const QString& channel)
     QByteArray postDataSize = QByteArray::number(jsonString.size());
     QUrl serviceURL(channel);
     QNetworkRequest request(serviceURL);
+    request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
 
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Content-Length", postDataSize);
