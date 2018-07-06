@@ -87,8 +87,8 @@ void LoggerService::logTofile(const QString& message)
 QString LoggerService::createSlackMessage(const QString& message) const
 {
     QDateTime now = QDateTime::currentDateTime();
-    QString currentTime = "[" + now.date().toString() + " " + now.time().toString() + "] ";
-    QString appData =  appName + " " + QString::number(appId) + " ";
+    QString currentTime = "[" + now.date().toString() + " " + now.time().toString() + ": ";
+    QString appData =  appName + " " + QString::number(appId) + "] ";
     return  currentTime + appData + message;
 }
 

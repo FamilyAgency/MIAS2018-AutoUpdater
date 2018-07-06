@@ -6,17 +6,15 @@
 
 SlackComponent::SlackComponent(QObject *parent) : BaseComponent(parent)
 {
-    networkManager = new QNetworkAccessManager(this);
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(httpRequestSuccessHandler(QNetworkReply*)));
-}
+    httpClient.reset(new HTTPClient());
+    connect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
+    connect(httpClient.data(), SIGNAL(httpRequestFailed(const QString&)), this, SLOT(httpRequestFailedHandler(const QString&)));
+  }
 
 SlackComponent::~SlackComponent()
 {
-    if(networkManager)
-    {
-        disconnect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(httpRequestSuccessHandler(QNetworkReply*)));
-        delete networkManager;
-    }
+    disconnect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
+    disconnect(httpClient.data(), SIGNAL(httpRequestFailed(const QString&)), this, SLOT(httpRequestFailedHandler(const QString&)));
 }
 
 void SlackComponent::setConfig(ConfigPtr value)
@@ -43,30 +41,19 @@ void SlackComponent::sendMessage(const QString& msg, const QString& channel)
 
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Content-Length", postDataSize);
-    QNetworkReply* reply = networkManager->post(request, jsonString);
+    httpClient->runPostRequest(request, jsonString);
 }
 
-void SlackComponent::httpRequestSuccessHandler(QNetworkReply* reply)
+void SlackComponent::httpRequestSuccessHandler(const QString& data)
 {
-    if (reply->error() != QNetworkReply::NoError )
-    { 
-        QString message = "Server error, "  + reply->errorString();
-        emit slackNotifyResponse(message);
-    }
-    else
-    {
-        QByteArray ba = reply->readAll();
-        QString s_data = QString::fromUtf8(ba);
-        QString message = "Server ok: "  + s_data;
-        emit slackNotifyResponse(message);
-    }
-
-    reply->deleteLater();
+    QString message = "Server ok: "  + data;
+    emit slackNotifyResponse(message);
 }
 
-void SlackComponent::onRequestFailed()
+void SlackComponent::httpRequestFailedHandler(const QString& data)
 {
-    qDebug()<<"request failed, we tried several times((( ";
+   QString message = "Server error: " + data;
+   emit slackNotifyResponse(message);
 }
 
 

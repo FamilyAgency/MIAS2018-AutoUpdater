@@ -5,6 +5,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "components/BaseComponent.h"
+#include "network/http/HTTPClient.h"
 
 class SlackComponent : public BaseComponent
 {
@@ -16,12 +17,12 @@ public:
     virtual void setConfig(ConfigPtr value) override;
 
 private:
-   QNetworkAccessManager* networkManager;
+   QSharedPointer<HTTPClient> httpClient;
    QSharedPointer<SlackConfig> slackConfig;
 
 private slots:
-   void httpRequestSuccessHandler(QNetworkReply* reply);
-   void onRequestFailed();
+   void httpRequestSuccessHandler(const QString& data);
+   void httpRequestFailedHandler(const QString& data);
 
 signals:
    void slackNotifyResponse(const QString& message);

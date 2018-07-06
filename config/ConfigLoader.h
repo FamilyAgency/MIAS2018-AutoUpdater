@@ -30,12 +30,12 @@ public:
     bool isValid() const;
 
 private:   
-    QScopedPointer<HTTPClient> httpClient;
+    QSharedPointer<HTTPClient> httpClient;
     QString configContext = "";
 
 private slots:
     void httpRequestSuccessHandler(const QString& data);
-    void httpRequestFailedHandler();
+    void httpRequestFailedHandler(const QString&);
 };
 
 #endif // CONFIGLOADER_H

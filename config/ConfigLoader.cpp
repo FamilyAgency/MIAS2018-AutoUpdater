@@ -6,13 +6,13 @@ ConfigLoader::ConfigLoader()
 {
     httpClient.reset(new HTTPClient());
     connect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
-    connect(httpClient.data(), SIGNAL(httpRequestFailed()), this, SLOT(httpRequestFailedHandler()));
+    connect(httpClient.data(), SIGNAL(httpRequestFailed(const QString&)), this, SLOT(httpRequestFailedHandler(const QString&)));
 }
 
 ConfigLoader::~ConfigLoader()
 {
     disconnect(httpClient.data(), SIGNAL(httpRequestSuccess(const QString&)), this, SLOT(httpRequestSuccessHandler(const QString&)));
-    disconnect(httpClient.data(), SIGNAL(httpRequestFailed()), this, SLOT(httpRequestFailedHandler()));
+    disconnect(httpClient.data(), SIGNAL(httpRequestFailed(const QString&)), this, SLOT(httpRequestFailedHandler(const QString&)));
 }
 
 void ConfigLoader::load(CONFIG_LOAD_METHOD method, const QString& path)
@@ -37,7 +37,7 @@ void ConfigLoader::load(CONFIG_LOAD_METHOD method, const QString& path)
     else if(method == CONFIG_LOAD_METHOD::URL)
     {
         qDebug()<<"config url " << path;
-        httpClient->runRequest(path);
+        httpClient->runGetRequest(path);
     }
 }
 
@@ -47,7 +47,7 @@ void ConfigLoader::httpRequestSuccessHandler(const QString& data)
     emit configLoaded(data);
 }
 
-void ConfigLoader::httpRequestFailedHandler()
+void ConfigLoader::httpRequestFailedHandler(const QString& error)
 {
     qDebug()<<"httpRequestFailed";
     configLoadingError();

@@ -24,11 +24,16 @@ HTTPClient::~HTTPClient()
     }
 }
 
-void HTTPClient::runRequest(const QString& URL)
+void HTTPClient::runGetRequest(const QString& URL)
 {
     QNetworkRequest request = QNetworkRequest(QUrl(URL));
     //httpReply =
     networkManager->get(request);
+}
+
+void HTTPClient::runPostRequest(const QNetworkRequest& request, const QByteArray& data)
+{
+    networkManager->post(request, data);
 }
 
 void HTTPClient::httpRequestSuccessHandler(QNetworkReply* reply)
@@ -36,13 +41,15 @@ void HTTPClient::httpRequestSuccessHandler(QNetworkReply* reply)
     if (reply->error() != QNetworkReply::NoError )
     {
         qDebug() << "Request failed, " << reply->errorString();
-        emit httpRequestFailed();
+        emit httpRequestFailed(reply->errorString());
     }
     else
     {
         QByteArray ba = reply->readAll();
         emit httpRequestSuccess(QString::fromUtf8(ba));
     }
+
+    reply->deleteLater();
 }
 
 void HTTPClient::httpRequestErrorHandler(QNetworkReply::NetworkError data)
@@ -57,5 +64,5 @@ void HTTPClient::sslErrorHandler(QNetworkReply* reply,const QList<QSslError> &er
     }
 
     reply->ignoreSslErrors(errors);
-    emit httpRequestFailed();
+    emit httpRequestFailed("SSL Error");
 }
