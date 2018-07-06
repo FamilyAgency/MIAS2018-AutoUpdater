@@ -3,6 +3,7 @@
 #include <QJsonDocument.h>
 #include <QJsonObject.h>
 #include <QJsonArray.h>
+#include <QFile.h>
 
 ConfigWriter::ConfigWriter()
 {

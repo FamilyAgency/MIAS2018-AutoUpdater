@@ -28,7 +28,6 @@ private:
     void parseSlackConfig(QSharedPointer<SlackConfig> slackConfig, const QJsonObject& jsonObj);
     void parseMonitoringConfig(QSharedPointer<MonitoringConfig> monitoringConfig, const QJsonObject& jsonObj);
     void parseLoggerConfig(QSharedPointer<LoggerConfig> loggerConfig, const QJsonObject& jsonObj);
-
 };
 
 #endif // CONFIGPARSER_H
