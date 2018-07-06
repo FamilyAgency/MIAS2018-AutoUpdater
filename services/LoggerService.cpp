@@ -119,6 +119,8 @@ void LoggerService::start()
     {
         QDir().mkdir(getLocalLogDirPath());
     }
+
+    logTofile("SSL version: " + QSslSocket::sslLibraryBuildVersionString());
 }
 
 void LoggerService::stop()
