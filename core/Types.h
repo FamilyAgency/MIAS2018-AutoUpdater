@@ -15,17 +15,19 @@ private:
     Q_PROPERTY(int version MEMBER version)
     Q_PROPERTY(QString configUpdateUrl MEMBER configUpdateUrl)
     Q_PROPERTY(bool needRemoteUpdate MEMBER needRemoteUpdate)
-    Q_PROPERTY(int standId MEMBER standId)
+    Q_PROPERTY(int appId MEMBER appId)
     Q_PROPERTY(QString workingDirectory MEMBER workingDirectory)
-    Q_PROPERTY(QString folderSeparator MEMBER folderSeparator)
+    Q_PROPERTY(QString folderSeparator MEMBER folderSeparator)    
+    Q_PROPERTY(QString appName MEMBER appName)
 
  public:    
     int version;
     QString configUpdateUrl;
     bool needRemoteUpdate;
-    int standId;
+    int appId;
     QString workingDirectory;
     QString folderSeparator = "\\";
+    QString appName = "None";
 };
 Q_DECLARE_METATYPE(MainConfig)
 

@@ -49,9 +49,10 @@ void ConfigParser::parseMainConfig(QSharedPointer<MainConfig> mainConfig, const 
     mainConfig->version = jsonObj["version"].toInt();
     mainConfig->configUpdateUrl = jsonObj["configUpdateUrl"].toString();
     mainConfig->needRemoteUpdate = jsonObj["needRemoteUpdate"].toBool();
-    mainConfig->standId = jsonObj["standId"].toInt();
+    mainConfig->appId = jsonObj["appId"].toInt();
     mainConfig->workingDirectory = jsonObj["workingDirectory"].toString();
     mainConfig->folderSeparator = jsonObj["folderSeparator"].toString();
+    mainConfig->appName = jsonObj["appName"].toString();
 }
 
 void ConfigParser::parseProcessConfig(QSharedPointer<ProcessConfig> processConfig, const QJsonObject& jsonObj)

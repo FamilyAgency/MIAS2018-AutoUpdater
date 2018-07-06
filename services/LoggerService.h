@@ -37,10 +37,10 @@ public:
 
     void log(const QString& message, LogType type, LogRemoteType remoteType, bool saveLocal = true);
 
-
 private:
     QSharedPointer<SlackComponent> slackComponent;
-    int standId;
+    int appId = 0;
+    QString appName = "None";
 };
 
 #endif // LOGGERSERVICE_H

@@ -1,38 +1,35 @@
 {
-    "version": 13,
     "configUpdateUrl": "http://familyagency.ru/lab/synapse/digitalframes/config.json",
-    "needRemoteUpdate": false,
-    "standId": 1,
-    "workingDirectory": "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process",
     "folderSeparator": "\\",
-    "update":
-    {
-        "checkDirectory" : "c:\\projects\\Qt\\MIAS2018\\testBuilds\\",
+    "monitoring": {
+        "enable": true,
+        "memoryCheckMills": 10000
+    },
+    "needRemoteUpdate": false,
+    "process": {
+        "autorun": false,
+        "path": "release\\MindwaveGameClient.exe",
+        "startDelayMills": 2000
+    },
+    "slack": {
+        "enable": true,
+        "errorChannel": "https://hooks.slack.com/services/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",
+        "logChannel": "https://hooks.slack.com/services/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"
+    },
+    "appId": 1,
+    "appName": "AutoUpdater",
+    "update": {
+        "autocheck": true,
+        "autoupdate": false,
+        "checkDirectory": "c:\\projects\\Qt\\MIAS2018\\testBuilds\\",
         "lastUpdateDate": "04.07.2018",
         "millsCheck": 10000,
-        "autocheck": true,
-        "autoupdate": true,
-        "patternCheck":"build",
-        "releaseDirectory":"release",
-        "tempDirectory":"release_temp",
-        "oldDirectory":"release_old",
-        "runAppAfterUpdate" : true
+        "oldDirectory": "release_old",
+        "patternCheck": "build",
+        "releaseDirectory": "release",
+        "runAppAfterUpdate": true,
+        "tempDirectory": "release_temp"
     },
-    "process":
-    {
-        "path" : "release\\MindwaveGameClient.exe",
-        "autorun" : false,
-        "startDelayMills" : 2000
-    },
-    "slack":
-    {
-        "enable": true,
-        "logChannel": "https://hooks.slack.com/services/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",
-        "errorChannel": "https://hooks.slack.com/services/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"
-    },
-    "monitoring":
-    {
-        "enable": true,
-        "memoryCheckMills" : 10000
-    }
+    "version": 0,
+    "workingDirectory": "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process"
 }
