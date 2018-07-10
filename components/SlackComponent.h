@@ -13,8 +13,12 @@ class SlackComponent : public BaseComponent
 public:
     explicit SlackComponent(QObject *parent = nullptr);
     virtual ~SlackComponent();
-    void sendMessage(const QString& msg, const QString& channel);
+
+    virtual void start() override;
+    virtual void stop() override;
     virtual void setConfig(ConfigPtr value) override;
+
+    void sendMessage(const QString& msg, const QString& channel);
 
 private:
    QSharedPointer<HTTPClient> httpClient;

@@ -4,7 +4,7 @@
 
 #include <QObject>
 #include <QQmlContext>
-#include "BaseService.h"
+#include "components/BaseComponent.h"
 #include "components/SlackComponent.h"
 #include "config/Config.h"
 
@@ -22,16 +22,16 @@ enum class LogRemoteType
     Slack,
 };
 
-class LoggerService : public BaseService
+class LoggerComponent : public BaseComponent
 {
     Q_OBJECT
+
 public:
+    LoggerComponent(QObject *parent = nullptr);
+    virtual ~LoggerComponent();
 
-    LoggerService(QObject *parent = nullptr);
-    virtual ~LoggerService();
-
-    virtual void setConfig(ConfigPtr config) override;
     virtual void setQmlContext(QQmlContext* qmlContext) override;
+    virtual void setConfig(ConfigPtr config) override;
     virtual void start() override;
     virtual void stop() override;
     virtual QString getName() const override;
@@ -47,6 +47,7 @@ private:
     QSharedPointer<SlackComponent> slackComponent;
     int appId = 0;
     QString appName = "None";
+    QString logFormat = "dd.MM.yyyy";
 
     void logTofile(const QString& message);
 

@@ -6,7 +6,7 @@
 #include <QTimer>
 #include "config/Config.h"
 #include "monitoring/MemoryChecker.h"
-#include "services/LoggerService.h"
+#include "components/LoggerComponent.h"
 
 class MonitoringComponent : public BaseComponent
 {
@@ -14,14 +14,16 @@ class MonitoringComponent : public BaseComponent
 public:
     explicit MonitoringComponent(QObject *parent = nullptr);
     virtual ~MonitoringComponent();
+
     virtual void setConfig(ConfigPtr value) override;
     virtual void start() override;
+    virtual void stop() override;
 
 private:
    QSharedPointer<MonitoringConfig> monitoringConfig;
    QTimer* timer;
    MemoryChecker memoryChecker;
-   QSharedPointer<LoggerService> loggerService;
+   QSharedPointer<LoggerComponent> loggerComponent;
 
 private slots:
     void onUpdate();

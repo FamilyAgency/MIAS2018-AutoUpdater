@@ -1,33 +1,35 @@
-#include "LoggerService.h"
+#include "LoggerComponent.h"
 #include <QDateTime>
 #include <QCoreApplication>
 #include <QDir>
 
-LoggerService::LoggerService(QObject *parent) : BaseService(parent)
+LoggerComponent::LoggerComponent(QObject *parent) : BaseComponent(parent)
 {
+    name = "Logger";
+
     slackComponent.reset(new SlackComponent());
     connect(slackComponent.data(), SIGNAL(slackNotifyResponse(const QString&)), this, SLOT(onSlackNotifyResponse(const QString&)));
 }
 
-LoggerService::~LoggerService()
+LoggerComponent::~LoggerComponent()
 {
     disconnect(slackComponent.data(), SIGNAL(slackNotifyResponse(const QString&)), this, SLOT(onSlackNotifyResponse(const QString&)));
 }
 
-void LoggerService::setConfig(ConfigPtr value)
+void LoggerComponent::setConfig(ConfigPtr value)
 {
-    BaseService::setConfig(value);
+    BaseComponent::setConfig(value);
     appId = value->mainConfig->appId;
     appName = value->mainConfig->appName;
     slackComponent->setConfig(value);
 }
 
-void LoggerService::setQmlContext(QQmlContext* qmlContext)
+void LoggerComponent::setQmlContext(QQmlContext* qmlContext)
 {
     qmlContext->setContextProperty("logger", this);
 }
 
-void LoggerService::log(const QString& message, LogType type, LogRemoteType remoteType, bool saveLocal)
+void LoggerComponent::log(const QString& message, LogType type, LogRemoteType remoteType, bool saveLocal)
 {
     qDebug()<<message;
 
@@ -66,7 +68,7 @@ void LoggerService::log(const QString& message, LogType type, LogRemoteType remo
     }
 }
 
-void LoggerService::onSlackNotifyResponse(const QString& message)
+void LoggerComponent::onSlackNotifyResponse(const QString& message)
 {
     if(config->loggerConfig->localEnabled)
     {
@@ -74,7 +76,7 @@ void LoggerService::onSlackNotifyResponse(const QString& message)
     }
 }
 
-void LoggerService::logTofile(const QString& message)
+void LoggerComponent::logTofile(const QString& message)
 {
     QFile file(getLocalLogAbsoluteFilePath());
     file.open(QIODevice::Append | QIODevice::Text);
@@ -86,7 +88,7 @@ void LoggerService::logTofile(const QString& message)
     }
 }
 
-QString LoggerService::createSlackMessage(const QString& message) const
+QString LoggerComponent::createSlackMessage(const QString& message) const
 {
     QDateTime now = QDateTime::currentDateTime();
     QString currentTime = "[" + now.date().toString() + " " + now.time().toString() + ": ";
@@ -94,7 +96,7 @@ QString LoggerService::createSlackMessage(const QString& message) const
     return  currentTime + appData + message;
 }
 
-QString LoggerService::createLocalMessage(const QString& message) const
+QString LoggerComponent::createLocalMessage(const QString& message) const
 {
     QDateTime now = QDateTime::currentDateTime();
     QString currentTime = "[" + now.time().toString() + ": ";
@@ -103,19 +105,19 @@ QString LoggerService::createLocalMessage(const QString& message) const
     return localMessage;
 }
 
-QString LoggerService::getLocalLogAbsoluteFilePath() const
+QString LoggerComponent::getLocalLogAbsoluteFilePath() const
 {
     QDateTime now = QDateTime::currentDateTime();
-    QString fileFullPath = getLocalLogDirPath() + "/" + now.date().toString() +".txt";
+    QString fileFullPath = getLocalLogDirPath() + "/" + now.date().toString(logFormat) +".txt";
     return fileFullPath;
 }
 
-QString LoggerService::getLocalLogDirPath() const
+QString LoggerComponent::getLocalLogDirPath() const
 {
    return QCoreApplication::applicationDirPath() + "/" + config->loggerConfig->localPath;
 }
 
-void LoggerService::start()
+void LoggerComponent::start()
 {
     if(!QDir(getLocalLogDirPath()).exists())
     {
@@ -123,12 +125,12 @@ void LoggerService::start()
     }
 }
 
-void LoggerService::stop()
+void LoggerComponent::stop()
 {
 
 }
 
-QString LoggerService::getName() const
+QString LoggerComponent::getName() const
 {
     return "Logger";
 }

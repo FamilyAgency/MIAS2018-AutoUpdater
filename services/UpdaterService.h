@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QStringList>
 #include "BaseService.h"
-#include "services/LoggerService.h"
+#include "components/LoggerComponent.h"
 
 class UpdaterService : public BaseService
 {
@@ -56,7 +56,7 @@ protected:
     QDir newBuildDir = "";
     int newBuildVersion = 0;
     UpdateConfig _updateConfig;
-    QSharedPointer<LoggerService> loggerService;
+    QSharedPointer<LoggerComponent> loggerComponent;
 
     virtual void checkUpdate() = 0;
     virtual bool hasUpdate() = 0;

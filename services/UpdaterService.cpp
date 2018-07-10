@@ -6,7 +6,7 @@ UpdaterService::UpdaterService(QObject *parent) : BaseService(parent)
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
     connect(this, SIGNAL(updateCheckingComplete(bool)), this, SLOT(onUpdateCheckingComplete(bool)));
-    loggerService.reset(new LoggerService());
+    loggerComponent.reset(new LoggerComponent());
 }
 
 UpdaterService::~UpdaterService()
@@ -28,7 +28,7 @@ void UpdaterService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
     setUpdateConfig(*value->updateConfig);
-    loggerService->setConfig(value);
+    loggerComponent->setConfig(value);
 }
 
 void UpdaterService::setUpdateConfig(const UpdateConfig& value)
@@ -39,7 +39,7 @@ void UpdaterService::setUpdateConfig(const UpdateConfig& value)
 
 void UpdaterService::start()
 {
-    loggerService->start();
+    loggerComponent->start();
 
     if(_updateConfig.autocheck)
     {

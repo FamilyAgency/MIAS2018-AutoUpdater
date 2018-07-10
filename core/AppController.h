@@ -9,7 +9,7 @@
 #include "config/Config.h"
 #include "services/ProcessService.h"
 #include "services/UpdaterService.h"
-#include "services/LoggerService.h"
+#include "components/LoggerComponent.h"
 #include "components/MonitoringComponent.h"
 #include "Types.h"
 

@@ -42,11 +42,11 @@ bool UpdaterServiceFolder::hasUpdate()
     if(foundNewVersion)
     {
         newBuildVersion = lastVersionNum;
-        loggerService->log("Software version " + QString::number(newBuildVersion)+ " detected", LogType::Verbose, LogRemoteType::Slack, true);
+        loggerComponent->log("Software version " + QString::number(newBuildVersion)+ " detected", LogType::Verbose, LogRemoteType::Slack, true);
     }
     else
     {
-        loggerService->log("No updates detected", LogType::Verbose, LogRemoteType::Slack, true);
+        loggerComponent->log("No updates detected", LogType::Verbose, LogRemoteType::Slack, true);
     }
 
     setNeedUpdate(foundNewVersion);
@@ -57,7 +57,7 @@ bool UpdaterServiceFolder::copyPath(QString sourceDir, QString destinationDir, b
 {
     QDir originDirectory(sourceDir);
 
-    if (! originDirectory.exists())
+    if (!originDirectory.exists())
     {
         return false;
     }
@@ -106,7 +106,7 @@ bool UpdaterServiceFolder::copyPath(QString sourceDir, QString destinationDir, b
 
 void UpdaterServiceFolder::startUpdate()
 {
-    loggerService->log("Start update", LogType::Verbose, LogRemoteType::Slack, true);
+    loggerComponent->log("Start update", LogType::Verbose, LogRemoteType::Slack, true);
 
     QDir processDir = config->mainConfig->workingDirectory;
     QString releaseCurrent = _updateConfig.releaseDirectory;
@@ -131,7 +131,7 @@ void UpdaterServiceFolder::startUpdate()
         }
     }
     setNeedUpdate(false);
-    loggerService->log("Update complete, software version " + QString::number(newBuildVersion), LogType::Verbose, LogRemoteType::Slack, true);
+    loggerComponent->log("Update complete, software version " + QString::number(newBuildVersion), LogType::Verbose, LogRemoteType::Slack, true);
 
     emit updateComplete(_updateConfig.runAppAfterUpdate, newBuildVersion);
     start();

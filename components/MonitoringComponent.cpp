@@ -4,7 +4,7 @@ MonitoringComponent::MonitoringComponent(QObject *parent) : BaseComponent(parent
 {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
-    loggerService.reset(new LoggerService());
+    loggerComponent.reset(new LoggerComponent());
 }
 
 MonitoringComponent::~MonitoringComponent()
@@ -20,17 +20,21 @@ void MonitoringComponent::setConfig(ConfigPtr value)
 {
     BaseComponent::setConfig(value);
     monitoringConfig = value->monitoringConfig;
-    loggerService->setConfig(value);
+    loggerComponent->setConfig(value);
 }
 
 void MonitoringComponent::start()
 {
-    BaseComponent::start();
     timer->start(monitoringConfig->memoryCheckMills);
+}
+
+void MonitoringComponent::stop()
+{
+    timer->stop();
 }
 
 void MonitoringComponent::onUpdate()
 {
     QString outMemory = "check memory: " +  QString::number(memoryChecker.memoryUsed()) + " MB";
-    loggerService->log(outMemory, LogType::Verbose, LogRemoteType::Slack, true);
+    loggerComponent->log(outMemory, LogType::Verbose, LogRemoteType::Slack, true);
 }

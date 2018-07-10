@@ -10,7 +10,7 @@ ProcessService::ProcessService(QObject *parent) : BaseService(parent)
     connect(process, SIGNAL(started()), this, SLOT(onProcessStarted()));
     connect(process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onErrorOccurred(QProcess::ProcessError)));
 
-    loggerService.reset(new LoggerService());
+    loggerComponent.reset(new LoggerComponent());
 }
 
 ProcessService::~ProcessService()
@@ -37,7 +37,7 @@ void ProcessService::setConfig(ConfigPtr value)
 {
     BaseService::setConfig(value);
     setProcesConfig(*value->processConfig);
-    loggerService->setConfig(value);
+    loggerComponent->setConfig(value);
 }
 
 QString ProcessService::getProcessFullPath() const
@@ -60,7 +60,7 @@ ProcessConfig ProcessService::processConfig() const
 
 void ProcessService::start()
 {
-    loggerService->start();
+    loggerComponent->start();
     if(_processConfig.autorun)
     {
         startApp();
@@ -76,7 +76,7 @@ void ProcessService::startApp()
 {
     if(_processState == ProcessState::Stopped)
     {
-       loggerService->log("Process pending start...", LogType::Verbose, LogRemoteType::Slack, true);
+       loggerComponent->log("Process pending start...", LogType::Verbose, LogRemoteType::Slack, true);
        setProcessState(ProcessState::PendingStart);
        QTimer::singleShot(_processConfig.startDelayMills, this, SLOT(startUpWithDelay()));
     }
@@ -90,7 +90,7 @@ void ProcessService::startUpWithDelay()
 
 void ProcessService::onProcessStarted()
 {
-    loggerService->log("Process started", LogType::Verbose, LogRemoteType::Slack, true);
+    loggerComponent->log("Process started", LogType::Verbose, LogRemoteType::Slack, true);
     setProcessState(ProcessState::Running);
 }
 
@@ -101,7 +101,7 @@ void ProcessService::stopApp()
 
 void ProcessService::onProcessFinished(int value)
 {
-   loggerService->log("Process stopped", LogType::Verbose, LogRemoteType::Slack, true);
+   loggerComponent->log("Process stopped", LogType::Verbose, LogRemoteType::Slack, true);
    setProcessState(ProcessState::Stopped);   
    emit processStopped(value);
 }
@@ -129,10 +129,10 @@ QString ProcessService::getName() const
 
 void ProcessService::onReadyReadStandardError()
 {
-    loggerService->log("Process ready Read Standard Error !!!!", LogType::Error, LogRemoteType::Slack, true);
+    loggerComponent->log("Process ready Read Standard Error !!!!", LogType::Error, LogRemoteType::Slack, true);
 }
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)
 {   
-    loggerService->log("Process Error !!!!", LogType::Error, LogRemoteType::Slack, true);
+    loggerComponent->log("Process Error !!!!", LogType::Error, LogRemoteType::Slack, true);
 }

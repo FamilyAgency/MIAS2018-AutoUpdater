@@ -13,14 +13,14 @@ SOURCES += main.cpp \
     core/Types.cpp \
     network/http/HTTPClient.cpp \
     services/BaseService.cpp \
-    services/LoggerService.cpp \
     services/UpdaterService.cpp \
     services/ProcessService.cpp \
     components/SlackComponent.cpp \
     components/BaseComponent.cpp \
     components/MonitoringComponent.cpp \
     components/monitoring/MemoryChecker.cpp \
-    services/UpdaterServiceFolder.cpp
+    services/UpdaterServiceFolder.cpp \
+    components/LoggerComponent.cpp
 
 RESOURCES += qml.qrc
 
@@ -59,11 +59,11 @@ HEADERS += \
     core/Types.h \
     network/http/HTTPClient.h \
     services/BaseService.h \
-    services/LoggerService.h \
     services/UpdaterService.h \
     services/ProcessService.h \
     components/SlackComponent.h \
     components/BaseComponent.h \
     components/MonitoringComponent.h \
     components/monitoring/MemoryChecker.h \
-    services/UpdaterServiceFolder.h
+    services/UpdaterServiceFolder.h \
+    components/LoggerComponent.h
