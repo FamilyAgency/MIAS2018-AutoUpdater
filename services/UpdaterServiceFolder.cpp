@@ -46,7 +46,7 @@ bool UpdaterServiceFolder::hasUpdate()
     }
     else
     {
-        loggerComponent->log("No updates detected", LogType::Verbose, LogRemoteType::Slack, true);
+       // loggerComponent->log("No updates detected", LogType::Verbose, LogRemoteType::Slack, true);
     }
 
     setNeedUpdate(foundNewVersion);

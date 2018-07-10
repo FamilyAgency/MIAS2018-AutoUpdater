@@ -35,6 +35,8 @@ void MonitoringComponent::stop()
 
 void MonitoringComponent::onUpdate()
 {
-    QString outMemory = "check memory: " +  QString::number(memoryChecker.memoryUsed()) + " MB";
-    loggerComponent->log(outMemory, LogType::Verbose, LogRemoteType::Slack, true);
+    QString memory = "memory: " +  QString::number(memoryChecker.memoryUsed()) + " MB";
+    QString version = "software version: " + QString::number(config->mainConfig->version);
+    QString meaasege = memory + " | " + version;
+    loggerComponent->log(meaasege, LogType::Verbose, LogRemoteType::Slack, true);
 }
