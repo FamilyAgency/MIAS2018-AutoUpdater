@@ -53,6 +53,7 @@ signals:
     void processStateChanged();
     void processConfigChanged();
     void processStopped(int value);
+    void processErrorOccurred(QProcess::ProcessError);
 
 private slots:
     void onReadyReadStandardError();

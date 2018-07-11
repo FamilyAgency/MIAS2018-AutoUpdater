@@ -56,6 +56,7 @@ private slots:
     void onUpdateError();
     void onUpdateLoadingError();
     void onProcessStopped(int value);
+    void onProcessErrorOccurred(QProcess::ProcessError error);
 
 signals:
     void pendingSaveConfig();

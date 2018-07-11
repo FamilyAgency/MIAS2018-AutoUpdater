@@ -8,6 +8,7 @@ AppController::AppController(QObject *parent) : QObject(parent)
     processService.reset(new ProcessService());
     services.push_back(processService);
     connect(processService.data(), SIGNAL(processStopped(int)), this, SLOT(onProcessStopped(int)));
+    connect(processService.data(), SIGNAL(processErrorOccurred(QProcess::ProcessError)), this, SLOT(onProcessErrorOccurred(QProcess::ProcessError)));
 
     updaterService.reset(new UpdaterServiceFolder());
     services.push_back(updaterService);
@@ -74,6 +75,14 @@ void AppController::onProcessStopped(int value)
     if(updaterService->needUpdate())
     {
         updaterService->startUpdate();
+    }    
+}
+
+void AppController::onProcessErrorOccurred(QProcess::ProcessError error)
+{
+    if(!updaterService->needUpdate())
+    {
+         processService->startApp();
     }
 }
 

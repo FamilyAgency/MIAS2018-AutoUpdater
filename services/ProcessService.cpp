@@ -134,5 +134,7 @@ void ProcessService::onReadyReadStandardError()
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)
 {   
-    loggerComponent->log("Process Error !!!!", LogType::Error, LogRemoteType::Slack, true);
+    loggerComponent->log("Process Error !!!! " + QString::number((int)error), LogType::Error, LogRemoteType::Slack, true);
+    setProcessState(ProcessState::Stopped);
+    emit processErrorOccurred(error);
 }
