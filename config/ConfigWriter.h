@@ -12,6 +12,10 @@ public:
     ConfigWriter();
     ~ConfigWriter();
     void save(ConfigPtr config, const QString& path);
+
+private:
+    void saveSelfConfig(ConfigPtr config, const QString& path);
+    void saveProcessfConfig(ConfigPtr config, const QString& path);
 };
 
 #endif // CONFIGWRITER_H

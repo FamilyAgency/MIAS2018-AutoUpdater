@@ -25,7 +25,10 @@ void MonitoringComponent::setConfig(ConfigPtr value)
 
 void MonitoringComponent::start()
 {
-    timer->start(monitoringConfig->memoryCheckMills);
+    if(monitoringConfig->enabled)
+    {
+        timer->start(monitoringConfig->memoryCheckMills);
+    }
 }
 
 void MonitoringComponent::stop()

@@ -26,6 +26,7 @@ void ConfigLoader::load(CONFIG_LOAD_METHOD method, const QString& path)
         {
             configContext = file.readAll();
             emit configLoaded(configContext);
+            file.close();
         }
         else
         {
