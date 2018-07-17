@@ -106,6 +106,13 @@ bool UpdaterServiceFolder::copyPath(QString sourceDir, QString destinationDir, b
 
 void UpdaterServiceFolder::startUpdate()
 {
+    if(loadingBuild)
+    {
+        return;
+    }
+
+    loadingBuild = true;
+
     loggerComponent->log("Start update", LogType::Verbose, LogRemoteType::Slack, true);
 
     QDir processDir = config->mainConfig->workingDirectory;
@@ -135,4 +142,5 @@ void UpdaterServiceFolder::startUpdate()
 
     emit updateComplete(_updateConfig.runAppAfterUpdate, newBuildVersion);
     start();
+    loadingBuild = false;
 }

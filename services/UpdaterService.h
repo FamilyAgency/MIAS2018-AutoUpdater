@@ -57,6 +57,7 @@ protected:
     int newBuildVersion = 0;
     UpdateConfig _updateConfig;
     QSharedPointer<LoggerComponent> loggerComponent;
+    bool loadingBuild = false;
 
     virtual void checkUpdate() = 0;
     virtual bool hasUpdate() = 0;
