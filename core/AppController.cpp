@@ -47,7 +47,7 @@ void AppController::onConfigLoaded(ConfigPtr value)
 }
 
 void AppController::onPendingUpdate()
-{    
+{
     if(processService->isStopped())
     {
         updaterService->startUpdate();
@@ -71,7 +71,7 @@ void AppController::onUpdateComplete(bool runApp, int newBuildVersion)
 }
 
 void AppController::onProcessStopped(int value)
-{
+{  
     if(updaterService->needUpdate())
     {
         updaterService->startUpdate();
@@ -80,9 +80,13 @@ void AppController::onProcessStopped(int value)
 
 void AppController::onProcessErrorOccurred(QProcess::ProcessError error)
 {
-    if(!updaterService->needUpdate())
+    if(updaterService->needUpdate())
     {
-         processService->startApp();
+        updaterService->startUpdate();
+    }
+    else
+    {
+       processService->startApp();
     }
 }
 
