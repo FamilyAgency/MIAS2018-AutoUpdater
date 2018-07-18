@@ -1,13 +1,34 @@
 #include "UpdaterServiceFolder.h"
 
+
 UpdaterServiceFolder::UpdaterServiceFolder(QObject *parent) : UpdaterService(parent)
 {
+    worker = new CopyThread();
+    worker->moveToThread(&workerThread);
+    connect(&workerThread, SIGNAL(started()), worker, SLOT(doWork()));
+    connect(worker, &CopyThread::copyFile, this, &UpdaterServiceFolder::onCopyFile);
+    connect(worker, &CopyThread::filesCounted, this, &UpdaterServiceFolder::onFilesCounted);
+    connect(worker, &CopyThread::copyProcessComplete, this, &UpdaterServiceFolder::onCopyProcessComplete);
+}
 
+UpdaterServiceFolder::~UpdaterServiceFolder()
+{
+    workerThread.quit();
+    workerThread.wait();
+    disconnect(&workerThread, SIGNAL(started()), worker, SLOT(doWork()));
+
+    if(worker)
+    {
+        delete worker;
+        disconnect(worker, &CopyThread::filesCounted, this, &UpdaterServiceFolder::onFilesCounted);
+        disconnect(worker, &CopyThread::copyFile, this, &UpdaterServiceFolder::onCopyFile);
+        disconnect(worker, &CopyThread::copyProcessComplete, this, &UpdaterServiceFolder::onCopyProcessComplete);
+    }
 }
 
 void UpdaterServiceFolder::checkUpdate()
 {
-    timer->stop();
+   // timer->stop();
     newBuildDir.setPath("");
     bool status = hasUpdate();
     emit updateCheckingComplete(status);
@@ -46,62 +67,11 @@ bool UpdaterServiceFolder::hasUpdate()
     }
     else
     {
-       // loggerComponent->log("No updates detected", LogType::Verbose, LogRemoteType::Slack, true);
+        // loggerComponent->log("No updates detected", LogType::Verbose, LogRemoteType::Slack, true);
     }
 
     setNeedUpdate(foundNewVersion);
     return foundNewVersion;
-}
-
-bool UpdaterServiceFolder::copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory)
-{
-    QDir originDirectory(sourceDir);
-
-    if (!originDirectory.exists())
-    {
-        return false;
-    }
-
-    QDir destinationDirectory(destinationDir);
-
-    if(destinationDirectory.exists() && !overWriteDirectory)
-    {
-        return false;
-    }
-    else if(destinationDirectory.exists() && overWriteDirectory)
-    {
-        destinationDirectory.removeRecursively();
-    }
-
-    originDirectory.mkpath(destinationDir);
-
-    foreach (QString directoryName, originDirectory.entryList(QDir::Dirs | \
-                                                              QDir::NoDotAndDotDot))
-    {
-        QString destinationPath = destinationDir + "/" + directoryName;
-        originDirectory.mkpath(destinationPath);
-        copyPath(sourceDir + "/" + directoryName, destinationPath, overWriteDirectory);
-    }
-
-    foreach (QString fileName, originDirectory.entryList(QDir::Files))
-    {
-        auto fileSource = sourceDir + "/" + fileName;
-        auto fileDist = destinationDir + "/" + fileName;
-        qDebug()<<"........ fileSource "<<fileSource;
-        qDebug()<<"........ fileDist "<<fileDist;
-        QFile::copy(fileSource, fileDist);
-    }
-
-    /*! Possible race-condition mitigation? */
-    QDir finalDestination(destinationDir);
-    finalDestination.refresh();
-
-    if(finalDestination.exists())
-    {
-        return true;
-    }
-
-    return false;
 }
 
 void UpdaterServiceFolder::startUpdate()
@@ -112,31 +82,70 @@ void UpdaterServiceFolder::startUpdate()
     }
 
     loadingBuild = true;
+    filesCopied = 0;
+    totalFilesCount = 0;
 
     loggerComponent->log("Start update", LogType::Verbose, LogRemoteType::Slack, true);
 
     QDir processDir = config->mainConfig->workingDirectory;
-    QString releaseCurrent = _updateConfig.releaseDirectory;
-    QString releaseTemp = _updateConfig.tempDirectory;
-    QString releaseOld = _updateConfig.oldDirectory;
     QString separator = config->mainConfig->folderSeparator;
+    QString releaseTemp = _updateConfig.tempDirectory;
+
+    emit loadingStarted();
 
     if(!newBuildDir.path().isEmpty())
     {
         QDir destDir = processDir.absolutePath() + separator + releaseTemp;
-        bool status = copyPath(newBuildDir.absolutePath(), destDir.absolutePath(), true);
-        if(status)
+        worker->setPath(newBuildDir.absolutePath(), destDir.absolutePath(), true);
+
+        if(workerThread.isRunning())
         {
-            bool status = false;
-            status = processDir.rename(releaseCurrent, releaseOld);
-            qDebug()<<"..rename status 1..... "<<status;
-            status = processDir.rename(releaseTemp, releaseCurrent);
-            qDebug()<<"..rename status 2..... "<<status;
-            QDir removeDir = processDir.absolutePath() + separator + releaseOld;
-            status =  removeDir.removeRecursively();
-            qDebug()<<"..remove status..... "<<status;
+           // worker->doWork();
         }
+
+        workerThread.start();
     }
+    else
+    {
+        //error
+    }
+}
+
+void UpdaterServiceFolder::onCopyFile()
+{
+    filesCopied++;
+    qDebug()<<"........ files Count "<<filesCopied<<"/"<<totalFilesCount;
+    setUpdatePercent(filesCopied /float(totalFilesCount));
+}
+
+void UpdaterServiceFolder::onFilesCounted(int filesCount)
+{
+    totalFilesCount = filesCount;
+    setUpdatePercent(0);
+}
+
+void UpdaterServiceFolder::onCopyProcessComplete(bool _status)
+{
+    workerThread.terminate();
+    // bool status = copyPath(newBuildDir.absolutePath(), destDir.absolutePath(), true);
+    if(_status)
+    {
+        QString releaseCurrent = _updateConfig.releaseDirectory;
+        QString releaseTemp = _updateConfig.tempDirectory;
+        QString separator = config->mainConfig->folderSeparator;
+        QString releaseOld = _updateConfig.oldDirectory;
+        QDir processDir = config->mainConfig->workingDirectory;
+
+        bool status = false;
+        status = processDir.rename(releaseCurrent, releaseOld);
+        qDebug()<<"..rename status 1..... "<<status;
+        status = processDir.rename(releaseTemp, releaseCurrent);
+        qDebug()<<"..rename status 2..... "<<status;
+        QDir removeDir = processDir.absolutePath() + separator + releaseOld;
+        status =  removeDir.removeRecursively();
+        qDebug()<<"..remove status..... "<<status;
+    }
+
     setNeedUpdate(false);
     loggerComponent->log("Update complete, software version " + QString::number(newBuildVersion), LogType::Verbose, LogRemoteType::Slack, true);
 

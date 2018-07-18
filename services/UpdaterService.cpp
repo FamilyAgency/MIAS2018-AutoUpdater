@@ -6,7 +6,9 @@ UpdaterService::UpdaterService(QObject *parent) : BaseService(parent)
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(onUpdate()));
     connect(this, SIGNAL(updateCheckingComplete(bool)), this, SLOT(onUpdateCheckingComplete(bool)));
-    loggerComponent.reset(new LoggerComponent());
+    loggerComponent.reset(new LoggerComponent());    
+
+    setUpdatePercent(0.0f);
 }
 
 UpdaterService::~UpdaterService()
@@ -147,6 +149,19 @@ void UpdaterService::setTimeToUpdate(int value)
     _timeToUpdate = value;
     emit timeToUpdateChanged();
 }
+
+float UpdaterService::updatePercent() const
+{
+    return _updatePercent;
+}
+
+void UpdaterService::setUpdatePercent(float value)
+{
+    _updatePercent = value;
+    emit updatePercentChanged();
+}
+
+void setUpdatePercent(float value);
 
 UpdateConfig UpdaterService::updateConfig() const
 {

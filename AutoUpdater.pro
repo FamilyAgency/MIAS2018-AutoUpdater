@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     components/MonitoringComponent.cpp \
     components/monitoring/MemoryChecker.cpp \
     services/UpdaterServiceFolder.cpp \
-    components/LoggerComponent.cpp
+    components/LoggerComponent.cpp \
+    services/updater/CopyThread.cpp
 
 RESOURCES += qml.qrc
 
@@ -66,4 +67,5 @@ HEADERS += \
     components/MonitoringComponent.h \
     components/monitoring/MemoryChecker.h \
     services/UpdaterServiceFolder.h \
-    components/LoggerComponent.h
+    components/LoggerComponent.h \
+    services/updater/CopyThread.h

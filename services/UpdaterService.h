@@ -16,6 +16,7 @@ class UpdaterService : public BaseService
     Q_PROPERTY(int timeToUpdate READ timeToUpdate WRITE setTimeToUpdate NOTIFY timeToUpdateChanged)
     Q_PROPERTY(UpdateConfig updateConfig READ updateConfig WRITE setUpdateConfig NOTIFY updateConfigChanged)
     Q_PROPERTY(bool needUpdate READ needUpdate WRITE setNeedUpdate NOTIFY needUpdateChanged)
+    Q_PROPERTY(float updatePercent READ updatePercent WRITE setUpdatePercent NOTIFY updatePercentChanged)
 
 public:
     explicit UpdaterService(QObject *parent = nullptr);
@@ -38,6 +39,7 @@ public:
     virtual QString getName() const override;
     virtual void setQmlContext(QQmlContext* qmlContext);
     virtual void setConfig(ConfigPtr value) override;
+    virtual void startUpdate() = 0;
 
     bool hasUpdate(QDir& newBuildDir);
 
@@ -49,12 +51,16 @@ public:
 
     bool needUpdate() const;
     void setNeedUpdate(bool value);
-    virtual void startUpdate() = 0;
+
+    float updatePercent() const;
+    void setUpdatePercent(float value);
 
 protected:
     QTimer* timer;
     QDir newBuildDir = "";
     int newBuildVersion = 0;
+    float _updatePercent = 0.0;
+
     UpdateConfig _updateConfig;
     QSharedPointer<LoggerComponent> loggerComponent;
     bool loadingBuild = false;
@@ -66,7 +72,7 @@ private:
     int startTime = 0;
     const int taskTimerMills = 10;    
     int _timeToUpdate = 0;
-    bool _needUpdate = false;
+    bool _needUpdate = false;  
 
    bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory);
    void resetTimer();
@@ -80,6 +86,8 @@ signals:
     void updateConfigChanged();
     void needUpdateChanged();
     void updateCheckingComplete(bool);
+    void updatePercentChanged();
+    void loadingStarted();
 
 private slots:
     void onUpdate();

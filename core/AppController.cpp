@@ -76,18 +76,22 @@ void AppController::onProcessStopped(int value)
     {
         updaterService->startUpdate();
     }    
+    else
+    {
+        processService->start();
+    }
 }
 
 void AppController::onProcessErrorOccurred(QProcess::ProcessError error)
 {
-    if(updaterService->needUpdate())
-    {
-        updaterService->startUpdate();
-    }
-    else
-    {
-       processService->startApp();
-    }
+//    if(updaterService->needUpdate())
+//    {
+//        updaterService->startUpdate();
+//    }
+//    else
+//    {
+//       processService->startApp();
+//    }
 }
 
 void AppController::onUpdateError()
@@ -108,6 +112,7 @@ void AppController::onConfigError()
 void AppController::start()
 {
     updateAllConfigs();
+
     for(auto service: services)
     {
         service->start();

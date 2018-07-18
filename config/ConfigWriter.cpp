@@ -53,6 +53,8 @@ void ConfigWriter::saveProcessfConfig(ConfigPtr config, const QString& path)
         QJsonDocument jsonDoc = QJsonDocument::fromJson(configContext.toUtf8());
         QJsonObject jsonObj   = jsonDoc.object();
         jsonObj["version"] = QJsonValue::fromVariant(config->mainConfig->version);
+        jsonObj["appId"] = QJsonValue::fromVariant(config->mainConfig->appId);
+        qDebug()<<"write appid"<<QJsonValue::fromVariant(config->mainConfig->appId);
 
         QFile saveFile(processConfigPath);
         QJsonDocument doc(jsonObj);

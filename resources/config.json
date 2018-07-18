@@ -24,7 +24,7 @@
         "errorChannel": "https://hooks.slack.com/services/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",
         "logChannel": "https://hooks.slack.com/services/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"
     },
-    "appId": 1,
+    "appId": 10,
     "appName": "AutoUpdater",
     "update": {
         "autocheck": true,

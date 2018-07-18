@@ -25,4 +25,9 @@ ApplicationWindow
         x:marginLeft;
         y:marginTop;
     }
+
+    LoadingScreen
+    {
+
+    }
 }
