@@ -28,7 +28,7 @@ UpdaterServiceFolder::~UpdaterServiceFolder()
 
 void UpdaterServiceFolder::checkUpdate()
 {
-   // timer->stop();
+    timer->stop();
     newBuildDir.setPath("");
     bool status = hasUpdate();
     emit updateCheckingComplete(status);
