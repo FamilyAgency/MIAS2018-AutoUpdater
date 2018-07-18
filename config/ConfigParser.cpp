@@ -30,7 +30,7 @@ void ConfigParser::parse(const QString& configData)
         parseMainConfig(config->mainConfig, jsonObj);
         parseProcessConfig(config->processConfig, jsonObj["process"].toObject());
         parseUpdateConfig(config->updateConfig, jsonObj["update"].toObject());
-        parseSlackConfig(config->slackConfig, jsonObj["slack"].toObject());
+        parseSlackConfig(config->slackConfig, jsonObj["slack"].toArray());
         parseMonitoringConfig(config->monitoringConfig, jsonObj["monitoring"].toObject());
         parseLoggerConfig(config->loggerConfig, jsonObj["logger"].toObject());
 
@@ -78,11 +78,19 @@ void ConfigParser::parseUpdateConfig(QSharedPointer<UpdateConfig> updateConfig, 
     updateConfig->autoupdate = jsonObj["autoupdate"].toBool();
 }
 
-void ConfigParser::parseSlackConfig(QSharedPointer<SlackConfig> slackConfig, const QJsonObject& jsonObj)
-{  
-    slackConfig->logChannel = jsonObj["logChannel"].toString();
-    slackConfig->errorChannel = jsonObj["errorChannel"].toString();
-    slackConfig->enabled = jsonObj["enabled"].toBool();
+void ConfigParser::parseSlackConfig(QSharedPointer<SlackFullConfig> slackConfig, const QJsonArray& jsonArray)
+{
+    for(auto slackChannel : jsonArray)
+    {
+        SlackAppConfig slackChannelconfig;
+        auto slackChannelJsonObj = slackChannel.toObject();
+
+        slackChannelconfig.enabled = slackChannelJsonObj["enabled"].toBool();
+        slackChannelconfig.logChannel = slackChannelJsonObj["logChannel"].toString();
+        slackChannelconfig.errorChannel = slackChannelJsonObj["errorChannel"].toString();
+        slackChannelconfig.appId = slackChannelJsonObj["appId"].toInt();
+        slackConfig->slackMap.insert(slackChannelconfig.appId, slackChannelconfig);
+    }
 }
 
 void ConfigParser::parseMonitoringConfig(QSharedPointer<MonitoringConfig> monitoringConfig, const QJsonObject& jsonObj)

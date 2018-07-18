@@ -5,7 +5,7 @@ Config::Config()
     mainConfig.reset(new MainConfig);
     processConfig.reset(new ProcessConfig);
     updateConfig.reset(new UpdateConfig);
-    slackConfig.reset(new SlackConfig);
+    slackConfig.reset(new SlackFullConfig);
     monitoringConfig.reset(new MonitoringConfig);
     loggerConfig.reset(new LoggerConfig);
 }

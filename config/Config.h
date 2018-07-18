@@ -6,6 +6,7 @@
 #include <QStringList.h>
 #include <QObject.h>
 #include <QSharedPointer>
+#include <QMap>
 #include <core/Types.h>
 
 typedef  QSharedPointer<class Config> ConfigPtr;
@@ -77,20 +78,28 @@ public:
 };
 Q_DECLARE_METATYPE(UpdateConfig)
 
-struct SlackConfig
+struct SlackAppConfig
 {
 private:
     Q_GADGET
     Q_PROPERTY(QString logChannel MEMBER logChannel)
     Q_PROPERTY(QString errorChannel MEMBER errorChannel)
     Q_PROPERTY(bool enabled MEMBER enabled)
+    Q_PROPERTY(int appId MEMBER appId)
 
 public:
     QString logChannel = "";
     QString errorChannel = "";
     bool enabled = false;
+    int appId = 0;
 };
-Q_DECLARE_METATYPE(SlackConfig)
+Q_DECLARE_METATYPE(SlackAppConfig)
+
+
+struct SlackFullConfig
+{
+    QMap<int, SlackAppConfig> slackMap;
+};
 
 struct MonitoringConfig
 {
@@ -118,9 +127,6 @@ public:
 };
 Q_DECLARE_METATYPE(LoggerConfig)
 
-
-
-
 class Config
 {
 public:
@@ -131,7 +137,7 @@ public:
     QSharedPointer<MainConfig> mainConfig;
     QSharedPointer<ProcessConfig> processConfig;
     QSharedPointer<UpdateConfig> updateConfig;
-    QSharedPointer<SlackConfig> slackConfig;
+    QSharedPointer<SlackFullConfig> slackConfig;
     QSharedPointer<MonitoringConfig> monitoringConfig;
     QSharedPointer<LoggerConfig> loggerConfig;
 

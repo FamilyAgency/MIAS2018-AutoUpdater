@@ -55,18 +55,21 @@ void ConfigWriter::saveProcessfConfig(ConfigPtr config, const QString& path)
         jsonObj["version"] = QJsonValue::fromVariant(config->mainConfig->version);
         jsonObj["appId"] = QJsonValue::fromVariant(config->mainConfig->appId);
         qDebug()<<"write appid"<<QJsonValue::fromVariant(config->mainConfig->appId);
+        qDebug()<<"write version"<<QJsonValue::fromVariant(config->mainConfig->version);
+        qDebug()<<"processConfigPath"<<processConfigPath;
 
         QFile saveFile(processConfigPath);
         QJsonDocument doc(jsonObj);
 
         if (!saveFile.open(QIODevice::WriteOnly))
         {
-            qWarning("Couldn't open save file.");
+            qWarning("Couldn't open save file.");           
         }
         else
         {
             saveFile.write(doc.toJson());
             saveFile.close();
+            qDebug()<<"saved.................";
         }
 
         file.close();

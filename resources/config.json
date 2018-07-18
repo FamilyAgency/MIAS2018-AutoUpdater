@@ -19,11 +19,21 @@
             "path": "logs"
         }
     },
-    "slack": {
-        "enabled": true,
-        "errorChannel": "https://hooks.slack.com/services/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",
-        "logChannel": "https://hooks.slack.com/services/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"
-    },
+    "slack":
+        [
+        {
+            "appId":100,
+            "enabled": true,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":1,
+            "enabled": true,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        }
+    ],
     "appId": 10,
     "appName": "AutoUpdater",
     "update": {

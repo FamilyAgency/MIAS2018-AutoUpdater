@@ -34,7 +34,7 @@ void LoggerComponent::log(const QString& message, LogType type, LogRemoteType re
     qDebug()<<message;
 
     QString color;
-    QString slackChannel = config->slackConfig->logChannel;
+    bool isError = false;
 
     switch(type)
     {
@@ -44,7 +44,7 @@ void LoggerComponent::log(const QString& message, LogType type, LogRemoteType re
 
     case LogType::Error:
         color = "red";
-        slackChannel = config->slackConfig->errorChannel;
+        isError = true;
         break;
 
     case LogType::Warning:
@@ -55,7 +55,7 @@ void LoggerComponent::log(const QString& message, LogType type, LogRemoteType re
     switch(remoteType)
     {
     case LogRemoteType::Slack:
-        slackComponent->sendMessage(createSlackMessage(message), slackChannel);
+        slackComponent->sendMessage(createSlackMessage(message), isError);
         break;
 
     case LogRemoteType::Server:

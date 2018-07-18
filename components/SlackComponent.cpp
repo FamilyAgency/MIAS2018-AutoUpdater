@@ -32,12 +32,23 @@ void SlackComponent::stop()
 void SlackComponent::setConfig(ConfigPtr value)
 {
     BaseComponent::setConfig(value);
-    slackConfig = value->slackConfig;
+    auto appId = value->mainConfig->appId;
+    auto slackMap = value->slackConfig->slackMap;
+
+    if(slackMap.contains(appId))
+    {
+        init = true;
+        slackConfig = value->slackConfig->slackMap[appId];
+    }
+    else
+    {
+        init = false;
+    }
 }
 
-void SlackComponent::sendMessage(const QString& msg, const QString& channel)
+void SlackComponent::sendMessage(const QString& msg, bool isError)
 {
-    if(!slackConfig->enabled)
+    if(!init || !slackConfig.enabled)
     {
         return;
     }
@@ -48,9 +59,11 @@ void SlackComponent::sendMessage(const QString& msg, const QString& channel)
     QJsonDocument doc(recordObject);
     QByteArray jsonString = doc.toJson();
     QByteArray postDataSize = QByteArray::number(jsonString.size());
+
+    QString channel = isError ? slackConfig.errorChannel : slackConfig.logChannel;
     QUrl serviceURL(channel);
+
     QNetworkRequest request(serviceURL);
-    // request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setRawHeader("Content-Type", "application/json");
     request.setRawHeader("Content-Length", postDataSize);
     httpClient->runPostRequest(request, jsonString);

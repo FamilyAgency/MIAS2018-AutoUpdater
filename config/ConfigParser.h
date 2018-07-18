@@ -25,7 +25,7 @@ private:
     void parseMainConfig(QSharedPointer<MainConfig> mainConfig, const QJsonObject& jsonObj);
     void parseProcessConfig(QSharedPointer<ProcessConfig> processConfig, const QJsonObject& jsonObj);
     void parseUpdateConfig(QSharedPointer<UpdateConfig> updateConfig, const QJsonObject& jsonObj);
-    void parseSlackConfig(QSharedPointer<SlackConfig> slackConfig, const QJsonObject& jsonObj);
+    void parseSlackConfig(QSharedPointer<SlackFullConfig> slackConfig,  const QJsonArray& jsonArray);
     void parseMonitoringConfig(QSharedPointer<MonitoringConfig> monitoringConfig, const QJsonObject& jsonObj);
     void parseLoggerConfig(QSharedPointer<LoggerConfig> loggerConfig, const QJsonObject& jsonObj);
 };

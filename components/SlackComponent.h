@@ -18,11 +18,12 @@ public:
     virtual void stop() override;
     virtual void setConfig(ConfigPtr value) override;
 
-    void sendMessage(const QString& msg, const QString& channel);
+    void sendMessage(const QString& msg, bool isError);
 
 private:
    QSharedPointer<HTTPClient> httpClient;
-   QSharedPointer<SlackConfig> slackConfig;
+   SlackAppConfig slackConfig;
+   bool init = false;
 
 private slots:
    void httpRequestSuccessHandler(const QString& data);
