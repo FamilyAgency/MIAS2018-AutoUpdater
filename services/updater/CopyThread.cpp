@@ -40,6 +40,32 @@ bool CopyThread::copyPath(QString sourceDir, QString destinationDir, bool overWr
 
     originDirectory.mkpath(destinationDir);
 
+    if(!filesToCopy.empty())
+    {
+        for(auto name : filesToCopy)
+        {
+            auto fileSource = sourceDir + "/" + name;
+            auto fileDist = destinationDir + "/" + name;
+
+            if(counting)
+            {
+                filesCount++;
+            }
+            else
+            {
+                qDebug()<<"........ 444 fileSource "<<fileSource;
+                qDebug()<<"........ 444 fileDist "<<fileDist;
+                QFile::copy(fileSource, fileDist);
+                emit copyFile();
+            }
+        }
+        return true;
+    }
+
+
+
+
+
     foreach (QString directoryName, originDirectory.entryList(QDir::Dirs | \
                                                               QDir::NoDotAndDotDot))
     {
@@ -48,7 +74,7 @@ bool CopyThread::copyPath(QString sourceDir, QString destinationDir, bool overWr
         copyPath(sourceDir + "/" + directoryName, destinationPath, overWriteDirectory, counting);
     }
 
-   // int fileNums = originDirectory.entryList(QDir::Files).size();
+    // int fileNums = originDirectory.entryList(QDir::Files).size();
 
     foreach (QString fileName, originDirectory.entryList(QDir::Files))
     {
@@ -63,15 +89,7 @@ bool CopyThread::copyPath(QString sourceDir, QString destinationDir, bool overWr
         }
         else
         {
-            if(filesToCopy.empty())
-            {
-                QFile::copy(fileSource, fileDist);
-            }
-            else if(fileNeedCopy(fileName))
-            {
-                 QFile::copy(fileSource, fileDist);
-            }
-
+            QFile::copy(fileSource, fileDist);
             emit copyFile();
         }
     }
@@ -108,6 +126,6 @@ void CopyThread::doWork()
     copyPath(sourceDir, destinationDir, overWriteDirectory, true);
     emit filesCounted(filesCount);
 
-    bool status =copyPath(sourceDir, destinationDir, overWriteDirectory, false);
+    bool status = copyPath(sourceDir, destinationDir, overWriteDirectory, false);
     emit copyProcessComplete(status);
 }

@@ -101,7 +101,7 @@ void UpdaterServiceFolder::startUpdate()
 
         if(workerThread.isRunning())
         {
-           // worker->doWork();
+            // worker->doWork();
         }
 
         workerThread.start();
@@ -131,20 +131,44 @@ void UpdaterServiceFolder::onCopyProcessComplete(bool _status)
     // bool status = copyPath(newBuildDir.absolutePath(), destDir.absolutePath(), true);
     if(_status)
     {
-        QString releaseCurrent = _updateConfig.releaseDirectory;
-        QString releaseTemp = _updateConfig.tempDirectory;
-        QString separator = config->mainConfig->folderSeparator;
-        QString releaseOld = _updateConfig.oldDirectory;
-        QDir processDir = config->mainConfig->workingDirectory;
+        auto filesToCopy = config->updateConfig->filesToCopy;
 
-        bool status = false;
-        status = processDir.rename(releaseCurrent, releaseOld);
-        qDebug()<<"..rename status 1..... "<<status;
-        status = processDir.rename(releaseTemp, releaseCurrent);
-        qDebug()<<"..rename status 2..... "<<status;
-        QDir removeDir = processDir.absolutePath() + separator + releaseOld;
-        status =  removeDir.removeRecursively();
-        qDebug()<<"..remove status..... "<<status;
+        if(filesToCopy.empty())
+        {
+            QString releaseCurrent = _updateConfig.releaseDirectory;
+            QString releaseTemp = _updateConfig.tempDirectory;
+            QString separator = config->mainConfig->folderSeparator;
+            QString releaseOld = _updateConfig.oldDirectory;
+            QDir processDir = config->mainConfig->workingDirectory;
+
+            bool status = false;
+            status = processDir.rename(releaseCurrent, releaseOld);
+            qDebug()<<"..rename status 1..... "<<status;
+            status = processDir.rename(releaseTemp, releaseCurrent);
+            qDebug()<<"..rename status 2..... "<<status;
+            QDir removeDir = processDir.absolutePath() + separator + releaseOld;
+            status =  removeDir.removeRecursively();
+            qDebug()<<"..remove status..... "<<status;
+        }
+        else
+        {
+            QString releaseCurrent = _updateConfig.releaseDirectory;
+            QString releaseTemp = _updateConfig.tempDirectory;
+            QString separator = config->mainConfig->folderSeparator;
+            //            QString releaseOld = _updateConfig.oldDirectory;
+            QDir processDir = config->mainConfig->workingDirectory;
+            bool status = false;
+
+            for(auto name : filesToCopy)
+            {
+                auto fileSource =  processDir.absolutePath() + separator + releaseTemp + "/" + name;
+                auto fileDist = processDir.absolutePath() + separator + releaseCurrent + "/" + name;
+                QFile::copy(fileSource, fileDist);
+            }
+
+            QDir removeDir = processDir.absolutePath() + separator + releaseTemp;
+            status =  removeDir.removeRecursively();
+        }
     }
 
     setNeedUpdate(false);
