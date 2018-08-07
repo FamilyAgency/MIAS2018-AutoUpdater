@@ -161,9 +161,17 @@ void UpdaterServiceFolder::onCopyProcessComplete(bool _status)
 
             for(auto name : filesToCopy)
             {
-                auto fileSource =  processDir.absolutePath() + separator + releaseTemp + "/" + name;
-                auto fileDist = processDir.absolutePath() + separator + releaseCurrent + "/" + name;
-                QFile::copy(fileSource, fileDist);
+                auto fileSource =  processDir.absolutePath() + "/" + releaseTemp + "/" + name;
+                auto fileDist = processDir.absolutePath() + "/" + releaseCurrent + "/" + name;
+                qDebug()<<"999.....fileSource "<<fileSource;
+                qDebug()<<"999......fileDist "<<fileDist;
+
+                QFile file (fileDist);
+                status = file.remove();
+                 qDebug()<<"......remove status "<<status;
+                status = QFile::copy(fileSource, fileDist);
+
+                qDebug()<<"......copy status "<<status;
             }
 
             QDir removeDir = processDir.absolutePath() + separator + releaseTemp;
