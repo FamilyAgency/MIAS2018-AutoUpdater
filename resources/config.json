@@ -20,18 +20,78 @@
         }
     },
     "slack":
-        [
-        {
-            "appId":100,
-            "enabled": true,
-            "errorChannel": "https://hooks.slack.com/services/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",
-            "logChannel": "https://hooks.slack.com/services/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"
-        },
+    [
         {
             "appId":1,
-            "enabled": true,
-            "errorChannel": "https://hooks.slack.com/services/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",
-            "logChannel": "https://hooks.slack.com/services/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"
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":2,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":3,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":4,
+            "enabled": false,
+            "errorChannel": "hhttps://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":5,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":6,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":10,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":11,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":12,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":20,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":21,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
+        },
+        {
+            "appId":22,
+            "enabled": false,
+            "errorChannel": "https://hooks.slack.com/services/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",
+            "logChannel": "https://hooks.slack.com/services/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"
         }
     ],
     "appId": 10,
