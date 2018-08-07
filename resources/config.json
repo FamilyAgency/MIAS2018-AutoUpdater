@@ -20,7 +20,7 @@
         }
     },
     "slack":
-    [
+        [
         {
             "appId":1,
             "enabled": false,
@@ -106,7 +106,8 @@
         "patternCheck": "build",
         "releaseDirectory": "release",
         "runAppAfterUpdate": true,
-        "tempDirectory": "release_temp"
+        "tempDirectory": "release_temp",
+        "filesToCopy": ["MindwaveGameClient.exe", "config.json"]
     },
     "version": 0,
     "workingDirectory": "c:\\projects\\Qt\\MIAS2018\\AutoUpdater\\process"

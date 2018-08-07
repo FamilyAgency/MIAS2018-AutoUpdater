@@ -19,12 +19,16 @@ public:
     CopyThread();
     void setPath(QString _sourceDir, QString _destinationDir, bool _overWriteDirectory);
     bool copyPath(QString sourceDir, QString destinationDir, bool overWriteDirectory, bool counting);
+    void setFilesToCopy(QVector<QString> files);
 
 public slots:
     void doWork();
 
 private:
     int filesCount;
+    QVector<QString> filesToCopy;
+    bool fileNeedCopy(const QString& fileName);
+
 
 signals:
     void copyFile();

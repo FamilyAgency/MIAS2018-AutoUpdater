@@ -65,7 +65,6 @@ void ConfigParser::parseProcessConfig(QSharedPointer<ProcessConfig> processConfi
 
 void ConfigParser::parseUpdateConfig(QSharedPointer<UpdateConfig> updateConfig, const QJsonObject& jsonObj)
 {
-    UpdateConfig ;
     updateConfig->checkDirectory = jsonObj["checkDirectory"].toString();
     updateConfig->lastUpdateDate = jsonObj["lastUpdateDate"].toString();
     updateConfig->millsCheck = jsonObj["millsCheck"].toInt();
@@ -76,6 +75,16 @@ void ConfigParser::parseUpdateConfig(QSharedPointer<UpdateConfig> updateConfig, 
     updateConfig->oldDirectory = jsonObj["oldDirectory"].toString();
     updateConfig->runAppAfterUpdate = jsonObj["runAppAfterUpdate"].toBool();
     updateConfig->autoupdate = jsonObj["autoupdate"].toBool();
+
+    updateConfig->filesToCopy.clear();
+
+    if(!jsonObj["filesToCopy"].isNull())
+    {
+        for(auto fileName : jsonObj["filesToCopy"].toArray())
+        {
+            updateConfig->filesToCopy.push_back(fileName.toString());
+        }
+    }
 }
 
 void ConfigParser::parseSlackConfig(QSharedPointer<SlackFullConfig> slackConfig, const QJsonArray& jsonArray)
@@ -95,8 +104,8 @@ void ConfigParser::parseSlackConfig(QSharedPointer<SlackFullConfig> slackConfig,
 
 void ConfigParser::parseMonitoringConfig(QSharedPointer<MonitoringConfig> monitoringConfig, const QJsonObject& jsonObj)
 {
-     monitoringConfig->memoryCheckMills = jsonObj["memoryCheckMills"].toInt();
-     monitoringConfig->enabled = jsonObj["enabled"].toBool();
+    monitoringConfig->memoryCheckMills = jsonObj["memoryCheckMills"].toInt();
+    monitoringConfig->enabled = jsonObj["enabled"].toBool();
 }
 
 void ConfigParser::parseLoggerConfig(QSharedPointer<LoggerConfig> loggerConfig, const QJsonObject& jsonObj)

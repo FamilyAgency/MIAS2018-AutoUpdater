@@ -5,6 +5,12 @@ CopyThread::CopyThread()
 
 }
 
+
+void CopyThread::setFilesToCopy(QVector<QString> files)
+{
+    filesToCopy = files;
+}
+
 void CopyThread::setPath(QString _sourceDir, QString _destinationDir, bool _overWriteDirectory)
 {
     sourceDir = _sourceDir;
@@ -54,11 +60,18 @@ bool CopyThread::copyPath(QString sourceDir, QString destinationDir, bool overWr
         if(counting)
         {
             filesCount++;
-
         }
         else
         {
-            QFile::copy(fileSource, fileDist);
+            if(filesToCopy.empty())
+            {
+                QFile::copy(fileSource, fileDist);
+            }
+            else if(fileNeedCopy(fileName))
+            {
+                 QFile::copy(fileSource, fileDist);
+            }
+
             emit copyFile();
         }
     }
@@ -70,6 +83,19 @@ bool CopyThread::copyPath(QString sourceDir, QString destinationDir, bool overWr
     if(finalDestination.exists())
     {
         return true;
+    }
+
+    return false;
+}
+
+bool CopyThread::fileNeedCopy(const QString& fileName)
+{
+    for(auto name : filesToCopy)
+    {
+        if (name == fileName)
+        {
+            return true;
+        }
     }
 
     return false;

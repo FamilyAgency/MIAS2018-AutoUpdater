@@ -75,6 +75,7 @@ public:
     QString oldDirectory = "";
     bool runAppAfterUpdate = false;
     bool autoupdate = false;
+    QVector<QString> filesToCopy;
 };
 Q_DECLARE_METATYPE(UpdateConfig)
 

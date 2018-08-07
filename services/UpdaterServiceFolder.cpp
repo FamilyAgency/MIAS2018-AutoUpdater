@@ -96,6 +96,7 @@ void UpdaterServiceFolder::startUpdate()
     if(!newBuildDir.path().isEmpty())
     {
         QDir destDir = processDir.absolutePath() + separator + releaseTemp;
+        worker->setFilesToCopy(config->updateConfig->filesToCopy);
         worker->setPath(newBuildDir.absolutePath(), destDir.absolutePath(), true);
 
         if(workerThread.isRunning())
