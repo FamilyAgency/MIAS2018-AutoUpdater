@@ -9,30 +9,30 @@ Item
     ColumnLayout
     {
         spacing: 10;
-        Text
-        {
-            text: "Process data";
-            font.family: "Helvetica";
-            font.pixelSize: 17;
-            color: "#000099";
-        }
+//        Text
+//        {
+//            text: "Process data";
+//            font.family: "Helvetica";
+//            font.pixelSize: 17;
+//            color: "#000099";
+//        }
 
-        Text
-        {
-            id:processPath;
-            text: "Process path: " + standData.mainConfig.workingDirectory + standData.mainConfig.folderSeparator + processService.processConfig.path;
-            font.family: "Helvetica";
-            font.pixelSize: 15;
-            color: "#999999";
-        }
+//        Text
+//        {
+//            id:processPath;
+//            text: "Process path: " + standData.mainConfig.workingDirectory + standData.mainConfig.folderSeparator + processService.processConfig.path;
+//            font.family: "Helvetica";
+//            font.pixelSize: 15;
+//            color: "#999999";
+//        }
 
-        Text
-        {
-            text: "Autorun: " + processService.processConfig.autorun;
-            font.family: "Helvetica";
-            font.pixelSize: 15;
-            color: "#999999";
-        }
+//        Text
+//        {
+//            text: "Autorun: " + processService.processConfig.autorun;
+//            font.family: "Helvetica";
+//            font.pixelSize: 15;
+//            color: "#999999";
+//        }
 
 
         Text
@@ -44,12 +44,32 @@ Item
             color: "#990000";
         }
 
+
+
         Button
         {
             id:startBtn;
-            implicitWidth: 200;
-            text:"Start";
+            implicitWidth: 200;            
             enabled: true;
+            opacity: enabled ? 1 : 0.2;
+
+            contentItem: Text
+            {
+                id: btnItem;
+                z: 1;
+                text:"Start App";
+                font.pixelSize: 15;
+                color: "#ffffff";
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignVCenter;
+            }
+
+            Rectangle
+            {
+                anchors.fill: parent;
+                color: "#a2a8be";
+            }
+
             onClicked:
             {
                 processService.startApp();
@@ -60,8 +80,27 @@ Item
         {
             id:stopBtn;
             implicitWidth: 200;
-            text:"Stop";
             enabled: false;
+
+            opacity: enabled ? 1 : 0.2;
+
+            contentItem: Text
+            {
+                id: btnItem1;
+                z: 1;
+                text:"Stop App";
+                font.pixelSize: 15;
+                color: "#ffffff";
+                horizontalAlignment: Text.AlignHCenter;
+                verticalAlignment: Text.AlignVCenter;
+            }
+
+            Rectangle
+            {
+                anchors.fill: parent;
+                color: "#a2a8be";
+            }
+
             onClicked:
             {
                 processService.stopApp();

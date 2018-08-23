@@ -6,5 +6,7 @@
         <file>qml/UpdaterService.qml</file>
         <file>resources/config.json</file>
         <file>qml/LoadingScreen.qml</file>
+        <file>qml/ServiceButtons.qml</file>
+        <file>resources/UpdaterBG.png</file>
     </qresource>
 </RCC>

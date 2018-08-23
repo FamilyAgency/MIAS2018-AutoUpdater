@@ -29,6 +29,9 @@ public:
     Q_INVOKABLE void stopApp();
     Q_INVOKABLE QString getProcessFullPath() const;
 
+    Q_INVOKABLE void showKeyboard();
+    Q_INVOKABLE void startExplorer();
+
     virtual void start() override;
     virtual void stop() override;
     virtual QString getName() const override;
@@ -48,6 +51,8 @@ private:
     QString program;
     ProcessState _processState = ProcessState::Stopped;
     QSharedPointer<LoggerComponent> loggerComponent;
+
+     QProcess *keyboardProcess, *explorerProcess;
 
 signals:
     void processStateChanged();

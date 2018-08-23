@@ -11,6 +11,9 @@ ProcessService::ProcessService(QObject *parent) : BaseService(parent)
     connect(process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(onErrorOccurred(QProcess::ProcessError)));
 
     loggerComponent.reset(new LoggerComponent());
+
+    keyboardProcess = new QProcess(this);
+    explorerProcess = new QProcess(this);
 }
 
 ProcessService::~ProcessService()
@@ -43,13 +46,13 @@ void ProcessService::setConfig(ConfigPtr value)
 QString ProcessService::getProcessFullPath() const
 {
     return config->mainConfig->workingDirectory +
-           config->mainConfig->folderSeparator +
-           _processConfig.path;
+            config->mainConfig->folderSeparator +
+            _processConfig.path;
 }
 
 void ProcessService::setProcesConfig(const ProcessConfig& value)
 {
-    _processConfig = value;  
+    _processConfig = value;
     emit processConfigChanged();
 }
 
@@ -76,9 +79,9 @@ void ProcessService::startApp()
 {
     if(_processState == ProcessState::Stopped)
     {
-       loggerComponent->log("Process pending start...", LogType::Verbose, LogRemoteType::Slack, true);
-       setProcessState(ProcessState::PendingStart);
-       QTimer::singleShot(_processConfig.startDelayMills, this, SLOT(startUpWithDelay()));
+        loggerComponent->log("Process pending start...", LogType::Verbose, LogRemoteType::Slack, true);
+        setProcessState(ProcessState::PendingStart);
+        QTimer::singleShot(_processConfig.startDelayMills, this, SLOT(startUpWithDelay()));
     }
 }
 
@@ -101,9 +104,9 @@ void ProcessService::stopApp()
 
 void ProcessService::onProcessFinished(int value)
 {
-   loggerComponent->log("Process stopped", LogType::Verbose, LogRemoteType::Slack, true);
-   setProcessState(ProcessState::Stopped);   
-   emit processStopped(value);
+    loggerComponent->log("Process stopped", LogType::Verbose, LogRemoteType::Slack, true);
+    setProcessState(ProcessState::Stopped);
+    emit processStopped(value);
 }
 
 ProcessService::ProcessState ProcessService::processState() const
@@ -129,12 +132,27 @@ QString ProcessService::getName() const
 
 void ProcessService::onReadyReadStandardError()
 {
-   // loggerComponent->log("Process ready Read Standard Error !!!!", LogType::Error, LogRemoteType::Slack, true);
+    // loggerComponent->log("Process ready Read Standard Error !!!!", LogType::Error, LogRemoteType::Slack, true);
 }
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)
-{   
-   // loggerComponent->log("Process Error !!!! " + QString::number((int)error), LogType::Error, LogRemoteType::Slack, true);
+{
+    // loggerComponent->log("Process Error !!!! " + QString::number((int)error), LogType::Error, LogRemoteType::Slack, true);
     setProcessState(ProcessState::Stopped);
     emit processErrorOccurred(error);
 }
+
+void ProcessService::startExplorer()
+{
+    QString program = "explorer.exe";
+    explorerProcess->start(program);
+}
+
+void ProcessService::showKeyboard()
+{
+    QString program = "explorer.exe";
+    QString folder = "C:\\Windows\\System32\\osk.exe";
+    keyboardProcess->start(program, QStringList() << folder);
+}
+
+

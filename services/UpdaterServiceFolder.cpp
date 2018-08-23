@@ -43,28 +43,33 @@ bool UpdaterServiceFolder::hasUpdate()
     QDir dir(_updateConfig.checkDirectory);
     QFileInfoList list = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
+    QString lastFileName;
+
     foreach(QFileInfo finfo, list)
     {
         QString pattern = _updateConfig.patternCheck;
         QString fileName = finfo.fileName();
+        lastFileName = fileName;
         int index = fileName.indexOf(pattern);
         if(index != -1)
         {
             QString versionNewString = fileName.right(fileName.length() - index - pattern.length());
             newBuildVersion  = versionNewString.toInt();
+
             if(newBuildVersion > lastVersionNum)
             {
-                QString checkFile = _updateConfig.checkDirectory +  fileName + "\\copyready.cfg";
-                qDebug()<<checkFile;
-                if(!fileExists(checkFile))
-                {
-                    return false;
-                }
                 lastVersionNum = newBuildVersion;
                 newBuildDir = finfo.absoluteFilePath();
                 foundNewVersion = true;
             }
         }
+    }
+
+    QString checkFile = _updateConfig.checkDirectory +  lastFileName + "\\copyready.cfg";
+
+    if(!fileExists(checkFile))
+    {
+        return false;
     }
 
     if(foundNewVersion)
