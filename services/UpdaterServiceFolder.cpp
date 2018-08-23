@@ -6,6 +6,7 @@ UpdaterServiceFolder::UpdaterServiceFolder(QObject *parent) : UpdaterService(par
     worker = new CopyThread();
     worker->moveToThread(&workerThread);
     connect(&workerThread, SIGNAL(started()), worker, SLOT(doWork()));
+
     connect(worker, &CopyThread::copyFile, this, &UpdaterServiceFolder::onCopyFile);
     connect(worker, &CopyThread::filesCounted, this, &UpdaterServiceFolder::onFilesCounted);
     connect(worker, &CopyThread::copyProcessComplete, this, &UpdaterServiceFolder::onCopyProcessComplete);
@@ -53,6 +54,12 @@ bool UpdaterServiceFolder::hasUpdate()
             newBuildVersion  = versionNewString.toInt();
             if(newBuildVersion > lastVersionNum)
             {
+                QString checkFile = _updateConfig.checkDirectory +  fileName + "\\copyready.cfg";
+                qDebug()<<checkFile;
+                if(!fileExists(checkFile))
+                {
+                    return false;
+                }
                 lastVersionNum = newBuildVersion;
                 newBuildDir = finfo.absoluteFilePath();
                 foundNewVersion = true;
@@ -72,6 +79,12 @@ bool UpdaterServiceFolder::hasUpdate()
 
     setNeedUpdate(foundNewVersion);
     return foundNewVersion;
+}
+
+bool UpdaterServiceFolder::fileExists(QString path)
+{
+    QFileInfo check_file(path);
+    return check_file.exists() && check_file.isFile();
 }
 
 void UpdaterServiceFolder::startUpdate()
@@ -163,15 +176,9 @@ void UpdaterServiceFolder::onCopyProcessComplete(bool _status)
             {
                 auto fileSource =  processDir.absolutePath() + "/" + releaseTemp + "/" + name;
                 auto fileDist = processDir.absolutePath() + "/" + releaseCurrent + "/" + name;
-                qDebug()<<"999.....fileSource "<<fileSource;
-                qDebug()<<"999......fileDist "<<fileDist;
-
                 QFile file (fileDist);
                 status = file.remove();
-                 qDebug()<<"......remove status "<<status;
                 status = QFile::copy(fileSource, fileDist);
-
-                qDebug()<<"......copy status "<<status;
             }
 
             QDir removeDir = processDir.absolutePath() + separator + releaseTemp;

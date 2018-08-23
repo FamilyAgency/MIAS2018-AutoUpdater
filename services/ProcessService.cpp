@@ -129,12 +129,12 @@ QString ProcessService::getName() const
 
 void ProcessService::onReadyReadStandardError()
 {
-    loggerComponent->log("Process ready Read Standard Error !!!!", LogType::Error, LogRemoteType::Slack, true);
+   // loggerComponent->log("Process ready Read Standard Error !!!!", LogType::Error, LogRemoteType::Slack, true);
 }
 
 void ProcessService::onErrorOccurred(QProcess::ProcessError error)
 {   
-    loggerComponent->log("Process Error !!!! " + QString::number((int)error), LogType::Error, LogRemoteType::Slack, true);
+   // loggerComponent->log("Process Error !!!! " + QString::number((int)error), LogType::Error, LogRemoteType::Slack, true);
     setProcessState(ProcessState::Stopped);
     emit processErrorOccurred(error);
 }

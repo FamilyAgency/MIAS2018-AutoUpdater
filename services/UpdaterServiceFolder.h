@@ -30,6 +30,10 @@ private:
     CopyThread *worker;
     int filesCopied = 0;
     int totalFilesCount = 0;
+
+
+    bool fileExists(QString path);
+
 };
 
 #endif // UPDATESERVICEFOLDER_H
