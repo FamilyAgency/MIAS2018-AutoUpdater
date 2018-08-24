@@ -9,7 +9,7 @@ ApplicationWindow
     width: 800;
     height: 800;
     title: qsTr("Auto updater");
-    flags:  Qt.SplashScreen;
+    flags:  Qt.Window;
 
 
     property int marginLeft: 50;
